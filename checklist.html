@@ -2498,6 +2498,8 @@
             if (!Array.isArray(savedLists)) savedLists = [];
 
             applyFacturaPatch();
+
+            applyGranosPatch();
             fetchBCVRate();
             switchTab('catalog');
         }
@@ -3303,6 +3305,8 @@
                 localStorage.removeItem('sol22_patch_' + FACTURA_PATCH.id);
                 applyFacturaPatch();
             }
+            localStorage.removeItem('sol22_patch_' + GRANOS_PATCH.id);
+            applyGranosPatch();
             openListId = null;
             switchTab('catalog');
         }
@@ -3887,6 +3891,33 @@
             saveProductsLocally();
             localStorage.setItem(flag, '1');
             setTimeout(() => alert(`Catálogo actualizado con la factura del ${FACTURA_PATCH.fecha} (precios con IVA 16%): ${updated} actualizados, ${created} nuevos, ${removed} duplicados eliminados.`), 400);
+        }
+
+        // Productos de Granos agregados el 20/10/2026 (precios en $). Se aplica una sola vez y no duplica.
+        const GRANOS_PATCH = {"id": "granos_2026_10_20", "items": [
+            {"name": "CARAOTAS NEGRAS 50 KG", "usd": 96, "find": ["CARAOTA NEGRA 50 KG", "CARAOTAS NEGRAS", "CARAOTA NEGRA"]},
+            {"name": "ALIMENTO 35 KG", "usd": 16, "find": ["ALIMENTO"]},
+            {"name": "MAIZ AMARILLO 50 KG", "usd": 24, "find": ["MAIZ AMARILLO"]},
+            {"name": "ENGORDE 40 KG", "usd": 22, "find": ["ENGORDE"]},
+            {"name": "P1P 40 KG", "usd": 42, "find": ["P1P"]},
+            {"name": "P2P 40 KG", "usd": 41, "find": ["P2P"]},
+            {"name": "LENTEJA 50 KG", "usd": 85, "find": ["LENTEJAS 50 KG", "LENTEJA", "LENTEJAS"]},
+            {"name": "PERRARINA CEPROVENCA 25 KG", "usd": 34, "find": ["PERRARINA CEPROVENCA", "PERRERIA CEPROVENCA"]}
+        ]};
+        function applyGranosPatch() {
+            const flag = 'sol22_patch_' + GRANOS_PATCH.id;
+            if (localStorage.getItem(flag)) return;
+            const rate = getCurrentRate();
+            let nextId = Date.now() + 1000;
+            GRANOS_PATCH.items.forEach(it => {
+                const names = [it.name].concat(it.find).map(normName);
+                const p = products.find(x => x.category === 'granos' && names.includes(normName(x.name)));
+                if (p) { p.name = it.name; p.priceUsd = it.usd; p.priceBs = it.usd * rate; }
+                else products.push({ id: nextId++, category: 'granos', name: it.name, priceBs: it.usd * rate, priceUsd: it.usd,
+                                     selectedQty: 0, purchased: false, aisle: '' });
+            });
+            saveProductsLocally();
+            localStorage.setItem(flag, '1');
         }
 
         window.onload = initApp;

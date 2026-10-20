@@ -180,9 +180,12 @@ header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;pa
 .fx button{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:8px 10px;font-size:13px;font-weight:700;cursor:pointer;color:var(--navy2)}
 .fx .tobuy{flex:1;background:#fff8e6;border-color:#f6dfa0;color:#7a5a00}
 .fx .fdel{color:var(--red)}
+.dst{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:12.5px;font-weight:700;color:var(--muted)}
+.dst select{flex:1;min-width:0;padding:9px 10px;border:1.5px solid var(--line);border-radius:10px;font-size:15px;font-weight:700;background:#fff;color:var(--navy2)}
+.dst select.set{border-color:var(--gold);background:#fffaf0}
 </style>
 <style id="goa-sw-css">
-.goa-sw{display:flex;gap:6px;padding:calc(6px + env(safe-area-inset-top)) 8px 6px;background:#071428;position:relative;z-index:40}
+.goa-sw{display:flex;gap:6px;padding:calc(6px + env(safe-area-inset-top)) 8px 6px;background:#071428;position:relative;z-index:4}
 .goa-sw a{flex:1;text-align:center;text-decoration:none;font:700 13.5px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:#c9d4e6;background:rgba(255,255,255,.08);border-radius:10px;padding:10px 6px;white-space:nowrap}
 .goa-sw a.on{background:#f2b632;color:#0b1f3a}
 @media(min-width:900px){.goa-sw{padding-right:368px}}
@@ -303,6 +306,7 @@ header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;pa
       <input id="faName" placeholder="Nombre del producto" autocomplete="off" list="prodList" enterkeyhint="next">
       <div class="r3"><input id="faQty" inputmode="decimal" placeholder="Cantidad" autocomplete="off" enterkeyhint="next"><input id="faPrice" inputmode="decimal" placeholder="Precio $ (opc.)" autocomplete="off" enterkeyhint="done"><button class="btn btn-add" id="faBtn">Anotar</button></div>
     </div>
+    <div class="chips" id="fChips" style="margin:0 0 10px"></div>
     <div id="fList"></div>
     <div class="acts">
       <button class="btn b-load" id="fBuyAll">🛒 Pasar TODOS a la lista de compras</button>
@@ -392,7 +396,8 @@ const BASE = [
 ["HARINA PAN DE MAIZ 1X20KG",20.20],["JABON ESPECIAL (VERDE) 250G 1X24",17.25],["JUGO SOL AMADO MANZANA 330ML 1X15",4.20],
 ["JUGO SOL AMADO PERA 330ML 1X15",4.20],["KETCHUP PAMPERO 397G 1X24",45.50],["MAYONESA MAVESA 445G 1X12",39.90],
 ["MEZCLA DE HARINA DOÑA EMILIA 900G 1X20",14.51],["MORTADELA PUNTA DEL MONTE 1KG 1X10",36.40],["MORTADELA PUNTA DEL MONTE 500G 1X20",40.30],
-["PAPEL ROSAL 215 HOJAS 2R (VERDE) 1X2X24",8.55]
+["PAPEL ROSAL 215 HOJAS 2R (VERDE) 1X2X24",8.55],
+["THE SUN 2L NEGRO",4.80],["THE SUN 400ML NEGRO 1X15",4.30],["COCACOLA 2L",8.50],["JUGO SUNTY 420ML PERA 1X15",4.50]
 ];
 // Precios actualizados de productos que ya existían (notas de entrega 19/10/26)
 const PRICE2 = {"REFRESCO BIG COLA 2L 1X6 UND":4.90,"SAL LAS MARIAS 1X25 KG":6.60,"SARDINA OMEGA EN ACEITE 1X24":14.00,
@@ -419,14 +424,15 @@ const FIX = {"TOCADOR ANITA SURTIDO 125G 1X72UND":56.64, "JABON DE BAÑO PROTEX 
  "CREMA DENTAL MAKSIM 90G 1X6UND":3.80, "FRESCA FRAGANCIA LAS LLAVES BEBE 1X48":40.00};
 Object.assign(KG,{"PASTA MARY VERMICELLI 1KG 1X12":12,"SAL ENSAL 1KG 1X26UND":26,"ARROZ GRAN MARQUES TIPO I 850G 1X24":20.4,
  "AZUCAR EL GALAN 1KG 1X20":20,"AZUCAR MI ANGEL 1KG 1X24 UNIDADES":24,"HARINA PAN DE MAIZ 1X20KG":20,
- "MEZCLA DE HARINA DOÑA EMILIA 900G 1X20":18,"HARINA DE TRIGO ROBIN HOOD TODO USO 1X20":18});
+ "MEZCLA DE HARINA DOÑA EMILIA 900G 1X20":18,"HARINA DE TRIGO ROBIN HOOD TODO USO 1X20":18,"HARINA MAIZ BLANCO MARY 1X20":20});
 
-const KEY='goa_compras_v1', VER=5;
+const KEY='goa_compras_v1', VER=6;
 const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 
 const mk=(p,i)=>({id:'p'+i, name:p[0], price:FIX[p[0]]??p[1], kg:KG[p[0]]||0});
 let state = store.get(KEY) || {products:BASE.map(mk), qty:{}, prov:'', tel:'', logo:null, deleted:[], v:VER};
 state.deleted=state.deleted||[];state.marks=state.marks||{};state.falt=state.falt||[];state.hist=state.hist||[];
+state.dests=state.dests||['Granos','Charcutería','Víveres','Refrescos','Otro'];
 const nkey=s=>String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
 BASE.forEach((p,i)=>{const id='p'+i;if(!state.products.some(x=>x.id===id||nkey(x.name)===nkey(p[0]))&&!state.deleted.includes(id))state.products.push(mk(p,i))});
 if((state.v||1)<4)state.logo=null;
@@ -435,6 +441,7 @@ if((state.v||1)<VER){
   state.products.forEach(p=>{
     if(v0<2&&FIX[p.name]!==undefined)p.price=FIX[p.name];
     if(v0<5&&PRICE2[p.name]!==undefined)p.price=PRICE2[p.name];
+    if(v0<6&&!(p.kg>0)&&KG[p.name])p.kg=KG[p.name];
     if(!(p.kg>0))p.kg=KG[p.name]||0;
   });
   state.v=VER;
@@ -780,18 +787,40 @@ function toFalt(list){
   save();updFaltCnt();toast(`${list.length} producto${list.length===1?'':'s'} en Faltantes`);
   closeP('opanel');closeP('dpanel');renderF();openP('fpanel');
 }
+let fFil='all';
+const fVis=()=>state.falt.map((i,n)=>[i,n]).filter(([i])=>fFil==='all'||(i.dest||'')===fFil);
+const fLabel=d=>d===''?'Sin asignar':d;
 function renderF(){
   const it=state.falt,s=sums(it);
   $('fN').textContent=it.length;$('fOk').textContent=s.ok;$('fNo').textContent=s.no;$('fKg').textContent=fkg(it.filter(i=>i.mark==='ok').reduce((a,i)=>a+i.qty*(i.kg||0),0));
   $('fT').textContent=fmt(it.filter(i=>i.mark==='ok').reduce((a,i)=>a+i.qty*i.price,0));
-  $('fList').innerHTML=it.length?it.map((i,n)=>`<div class="ck ${i.mark}"><div class="n">${esc(i.name)}</div>
+  if(fFil!=='all'&&fFil!==''&&!state.dests.includes(fFil))fFil='all';
+  const cnt=d=>it.filter(i=>(i.dest||'')===d).length, sin=cnt('');
+  $('fChips').innerHTML=it.length?[['all','Todos',it.length],...(sin?[['','Sin asignar',sin]]:[]),...state.dests.filter(d=>cnt(d)).map(d=>[d,d,cnt(d)])]
+    .map(([f,l,c])=>`<button class="chip ${fFil===f?'act':''}" data-ff="${esc(f)}">${esc(l)}<b>${c}</b></button>`).join(''):'';
+  const opts=cur=>`<option value="">— Sin asignar —</option>${state.dests.map(d=>`<option ${cur===d?'selected':''}>${esc(d)}</option>`).join('')}<option value="__new">➕ Nuevo destino…</option>`;
+  const vis=fVis();
+  $('fList').innerHTML=vis.length?vis.map(([i,n])=>`<div class="ck ${i.mark}"><div class="n">${esc(i.name)}</div>
     <div class="d">Cantidad: <b>${i.qty}</b>${i.price>0?` · ${fmt(i.price)} = <b>${fmt(i.qty*i.price)}</b>`:''}${i.kg?` · ⚖ ${fkg(i.qty*i.kg)}`:''}</div>
     <div class="bt"><button class="b-ok" data-fm="ok" data-n="${n}">✓ Compré</button><button class="b-no" data-fm="no" data-n="${n}">✗ No hay</button></div>
+    <div class="dst">Va para:<select data-fs="${n}" class="${i.dest?'set':''}">${opts(i.dest||'')}</select></div>
     <div class="fx"><button class="tobuy" data-fb="${n}">🛒 Pasar a compras</button><button class="fdel" data-fd="${n}" aria-label="Quitar">✕</button></div></div>`).join('')
     :'<div class="wnote">No hay faltantes pendientes. Anótalos arriba, o desde <b>📋 Pedido</b> marca productos como <b>Falta</b> y pásalos aquí.</div>';
-  $('fBuyAll').style.display=it.length?'':'none';
+  const nb=vis.filter(([i])=>i.mark!=='ok').length;
+  $('fBuyAll').style.display=nb?'':'none';
+  $('fBuyAll').textContent=fFil==='all'?'🛒 Pasar TODOS a la lista de compras':`🛒 Pasar ${fLabel(fFil)} (${nb}) a la lista de compras`;
+  $('fWa').textContent=fFil==='all'?'Enviar lista por WhatsApp (por destino)':`Enviar ${fLabel(fFil)} por WhatsApp`;
   updFaltCnt();
 }
+$('fChips').addEventListener('click',e=>{const b=e.target.closest('[data-ff]');if(!b)return;fFil=b.dataset.ff;renderF()});
+$('fList').addEventListener('change',e=>{
+  const sel=e.target.closest('[data-fs]');if(!sel)return;const i=state.falt[+sel.dataset.fs];
+  if(sel.value==='__new'){
+    const d=(prompt('Nombre del nuevo destino (ej: Charcutería, Proveedor X):')||'').trim();
+    if(d){if(!state.dests.includes(d))state.dests.push(d);i.dest=d;toast('Va para: '+d)}
+  }else{i.dest=sel.value;if(sel.value)toast('Va para: '+sel.value)}
+  save();renderF();
+});
 // Pasar faltantes a la lista de compras (página principal)
 function toBuy(list){
   if(!list.length)return;
@@ -811,8 +840,8 @@ $('fList').addEventListener('click',e=>{
   const fd=e.target.closest('[data-fd]');if(fd){state.falt.splice(+fd.dataset.fd,1);save();renderF();return}
   const b=e.target.closest('[data-fm]');if(!b)return;const i=state.falt[+b.dataset.n];
   i.mark=i.mark===b.dataset.fm?'':b.dataset.fm;save();renderF()});
-$('fBuyAll').onclick=async()=>{const l=state.falt.filter(i=>i.mark!=='ok');if(!l.length){toast('No hay faltantes para pasar');return}
-  if(!await ask(`¿Pasar ${l.length} faltante${l.length===1?'':'s'} a la lista de compras?`))return;toBuy(l)};
+$('fBuyAll').onclick=async()=>{const l=fVis().map(([i])=>i).filter(i=>i.mark!=='ok');if(!l.length){toast('No hay faltantes para pasar');return}
+  if(!await ask(`¿Pasar ${l.length} faltante${l.length===1?'':'s'}${fFil==='all'?'':' de '+fLabel(fFil)} a la lista de compras?`))return;toBuy(l)};
 autoPrice($('faName'),$('faPrice'));
 $('faName').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('faQty').focus()}});
 $('faQty').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('faPrice').focus()}});
@@ -822,7 +851,8 @@ $('faBtn').onclick=()=>{
   if(!name){toast('Escribe el nombre');$('faName').focus();return}
   const q=num($('faQty').value)||1, p=findP(name), pr=num($('faPrice').value)||(p?p.price:0);
   const x=state.falt.find(f=>f.name===name);
-  if(x){x.qty=q;if(pr>0)x.price=pr}else state.falt.push({name,qty:q,price:pr,kg:p?p.kg||0:0,mark:''});
+  const dest=fFil!=='all'?fFil:'';
+  if(x){x.qty=q;if(pr>0)x.price=pr;if(dest)x.dest=dest}else state.falt.push({name,qty:q,price:pr,kg:p?p.kg||0:0,mark:'',dest});
   save();renderF();
   $('faName').value=$('faQty').value=$('faPrice').value='';$('faName').focus();toast('Faltante anotado');
 };
@@ -836,9 +866,13 @@ $('fSave').onclick=async()=>{
   state.falt=state.falt.filter(i=>i.mark!=='ok').map(i=>({...i,mark:''}));
   save();renderF();toast('✅ Compra guardada en el historial');
 };
-$('fWa').onclick=()=>{if(!state.falt.length){toast('La lista está vacía');return}
-  let t='*GOA Business — Lista de faltantes*\nFecha: '+today()+'\n\n';
-  state.falt.forEach(i=>t+=`${i.mark==='ok'?'✅':i.mark==='no'?'❌':'•'} ${i.qty} x ${i.name}\n`);openWA('',t)};
+$('fWa').onclick=()=>{const vis=fVis().map(([i])=>i);if(!vis.length){toast('La lista está vacía');return}
+  let t='*GOA Business — Lista de faltantes*'+(fFil==='all'?'':'\nDestino: *'+fLabel(fFil)+'*')+'\nFecha: '+today()+'\n';
+  const groups=[...state.dests,''].filter(d=>vis.some(i=>(i.dest||'')===d));
+  groups.forEach(d=>{const g=vis.filter(i=>(i.dest||'')===d);
+    if(fFil==='all')t+=`\n📦 *${fLabel(d).toUpperCase()}* (${g.length})\n`;else t+='\n';
+    g.forEach(i=>t+=`${i.mark==='ok'?'✅':i.mark==='no'?'❌':'•'} ${i.qty} x ${i.name}\n`)});
+  openWA('',t)};
 $('fClear').onclick=async()=>{if(!state.falt.length)return;if(!await ask('¿Vaciar toda la lista de faltantes?'))return;state.falt=[];save();renderF()};
 updFaltCnt();
 save();drawLogo();render();
