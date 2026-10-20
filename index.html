@@ -77,7 +77,7 @@ header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;pa
 .wrow .d{font-size:12px;color:var(--muted);margin-top:2px}
 .wrow .k{font-weight:800;color:var(--navy2);white-space:nowrap}
 .wnote{font-size:12.5px;color:var(--muted);background:#fff;border-radius:12px;padding:10px 12px;margin-top:10px;line-height:1.4}
-.mainhead{flex-direction:row;justify-content:center;gap:14px;padding:calc(8px + env(safe-area-inset-top)) 12px 8px;background:linear-gradient(180deg,#0b1a33,#13305a)}
+.mainhead{flex-direction:row;justify-content:center;gap:14px;padding:8px 12px 8px;background:linear-gradient(180deg,#0b1a33,#13305a)}
 .mainhead .logo{width:120px;max-width:120px;height:auto;flex:none;border-radius:16px;background:none;cursor:default}
 .mainhead .logo img{display:block;width:100%;height:auto;border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.35)}
 .ptag{color:var(--gold2);font-weight:800;letter-spacing:.14em;font-size:13px;line-height:1.5}
@@ -181,9 +181,15 @@ header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;pa
 .fx .tobuy{flex:1;background:#fff8e6;border-color:#f6dfa0;color:#7a5a00}
 .fx .fdel{color:var(--red)}
 </style>
+<style id="goa-sw-css">
+.goa-sw{display:flex;gap:6px;padding:calc(6px + env(safe-area-inset-top)) 8px 6px;background:#071428;position:relative;z-index:40}
+.goa-sw a{flex:1;text-align:center;text-decoration:none;font:700 13.5px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:#c9d4e6;background:rgba(255,255,255,.08);border-radius:10px;padding:10px 6px;white-space:nowrap}
+.goa-sw a.on{background:#f2b632;color:#0b1f3a}
+@media(min-width:900px){.goa-sw{padding-right:368px}}
+</style>
 </head>
 <body>
-
+<nav class="goa-sw"><a href="./" class="on">🛒 Orden de compra</a><a href="checklist.html">✅ Checklist Sol 22</a></nav>
 <header class="mainhead">
   <div class="logo" id="logoBox"></div>
   <div class="ptag">ORDEN DE<br>COMPRA</div>
@@ -373,8 +379,30 @@ const BASE = [
 ["JABON PANELA FLORAL LAS LLAVES 250GX36UD",38.50],["JUSTY MANZANA 1.5L 1X12",10.00],["MAGGI SOPA DE POLLO 62G 1X12",14.75],
 ["PAPEL ROSAL 215 HOJAS (VERDE) 1X12 4R",8.45],["REFRESCO BIG COLA 2L 1X6 UND",4.85],["REFRESCO COOL UVA 400ML 1X16",3.90],
 ["REFRESCO FIRST KOLITA 2L 1X6",4.85],["REFRESCO FIRST PIÑA 2L 1X6UND",4.85],["SAL LAS MARIAS 1X25 KG",6.58],
-["SARDINA OMEGA EN ACEITE 1X24",13.80],["TOCADOR ANITA SURTIDO 125G 1X72UND",56.64],["TOCADOR ANITA SURTIDO 80G 1X72",36.60]
+["SARDINA OMEGA EN ACEITE 1X24",13.80],["TOCADOR ANITA SURTIDO 125G 1X72UND",56.64],["TOCADOR ANITA SURTIDO 80G 1X72",36.60],
+// Nuevos (notas de entrega 19/10/26)
+["PASTA MARY VERMICELLI 1KG 1X12",14.45],["SAL ENSAL 1KG 1X26UND",8.49],["SARDINA INCOSA EN ACEITE VEGETAL 170GX24",13.86],
+["SARDINAS SALSA DE TOMATE INCOSA 170GX24",13.86],["SARDINAS PUERTO ALEGRE ACEITE 24X170GR",12.30],["SARDINAS PUERTO ALEGRE TOMATE 24X170GR",12.30],
+["ACEITE VATEL SOYA 800ML 1X12",26.00],["ARROZ BLANCO TIPO I MARY TRADICIONAL 900G",14.65],["ARROZ GRAN MARQUES TIPO I 850G 1X24",15.99],
+["AZUCAR EL GALAN 1KG 1X20",18.55],["AZUCAR MI ANGEL 1KG 1X24 UNIDADES",21.35],["CARAMELO CHAO MORA AZUL 1X100UND",2.20],
+["CARAMELOS CHAO FRESA 1X100 UND",1.95],["COMPOTA OSOLE POUCH FRUTAS MIX 24 UN",10.95],["COMPOTA OSOLE POUCH MANZANA 100GR 24UND",10.95],
+["CREMA CHANTILLY MASTER TOP 1L 1X12",64.94],["DESODORANTE SPEED STICK 30G 1X6",7.20],["DETERGENTE ARIEL 400G 1X24",47.34],
+["DETERGENTE ULTREX MANZANA 600GRS 1X40",41.40],["DETERGENTE ULTREX MANZANA 250G 1X48",26.50],["FORORO VALLE HONDO 400G 1X24",18.89],
+["GALLETAS DE SODA CARABOBO 1X12 240GR",15.40],["HARINA DE TRIGO ROBIN HOOD TODO USO 1X20",14.85],["HARINA MAIZ BLANCO MARY 1X20",17.30],
+["HARINA PAN DE MAIZ 1X20KG",20.20],["JABON ESPECIAL (VERDE) 250G 1X24",17.25],["JUGO SOL AMADO MANZANA 330ML 1X15",4.20],
+["JUGO SOL AMADO PERA 330ML 1X15",4.20],["KETCHUP PAMPERO 397G 1X24",45.50],["MAYONESA MAVESA 445G 1X12",39.90],
+["MEZCLA DE HARINA DOÑA EMILIA 900G 1X20",14.51],["MORTADELA PUNTA DEL MONTE 1KG 1X10",36.40],["MORTADELA PUNTA DEL MONTE 500G 1X20",40.30],
+["PAPEL ROSAL 215 HOJAS 2R (VERDE) 1X2X24",8.55]
 ];
+// Precios actualizados de productos que ya existían (notas de entrega 19/10/26)
+const PRICE2 = {"REFRESCO BIG COLA 2L 1X6 UND":4.90,"SAL LAS MARIAS 1X25 KG":6.60,"SARDINA OMEGA EN ACEITE 1X24":14.00,
+ "SARDINA OMEGA EN TOMATE 1X24":14.00,"ACEITE AGROIL 800 ML":25.10,"AFEITADORA DORCO CABALLERO 1X20UND":14.85,
+ "ARROZ BLANCO MIMASA TRADICIONAL 900GX24":14.60,"CAFE HEIDY 15 UND X 200GR":29.95,"CAFE HEIDY 30 UND X 100GR":29.95,
+ "COLGATE TRIPLE ACCION 60ML 1X12":13.15,"DESODORANTE LADY SPEED 30G 1X6":7.20,"FRESCA FRAGANCIA LAS LLAVES BEBE 1X48":40.00,
+ "GALLETA TAM CORAZON 1X24 UND":10.60,"JABON DE BAÑO PROTEX 110G 1X72UND":82.50,"MAYONESA MAVESA 175G 1X24":40.00,
+ "PAPEL ALISOF 215H 4X12":6.60,"PAPEL HIGIENICO ALISOF 400 HOJAS 4X12":15.26,"PAPEL HIGIENICO ALISOF 600 HOJAS 4X12":21.74,
+ "PASTA LA ESPECIAL VERMICELLI 1KG 1X12":14.66};
+BASE.forEach(p=>{if(PRICE2[p[0]]!==undefined)p[1]=PRICE2[p[0]]});
 
 // Kilos por bulto (harinas, pastas, azúcar, sal)
 const KG = {
@@ -387,21 +415,26 @@ const KG = {
  "SARDINA OMEGA EN TOMATE 1X24":4.08, "SARDINA OMEGA EN ACEITE 1X24":4.08, "KETCHUP PAMPERO 198G 1X24":4.752
 };
 // Correcciones de precio confirmadas
-const FIX = {"TOCADOR ANITA SURTIDO 125G 1X72UND":56.64, "JABON DE BAÑO PROTEX 110G 1X72UND":82.49,
- "CREMA DENTAL MAKSIM 90G 1X6UND":3.80, "FRESCA FRAGANCIA LAS LLAVES BEBE 1X48":39.99};
+const FIX = {"TOCADOR ANITA SURTIDO 125G 1X72UND":56.64, "JABON DE BAÑO PROTEX 110G 1X72UND":82.50,
+ "CREMA DENTAL MAKSIM 90G 1X6UND":3.80, "FRESCA FRAGANCIA LAS LLAVES BEBE 1X48":40.00};
+Object.assign(KG,{"PASTA MARY VERMICELLI 1KG 1X12":12,"SAL ENSAL 1KG 1X26UND":26,"ARROZ GRAN MARQUES TIPO I 850G 1X24":20.4,
+ "AZUCAR EL GALAN 1KG 1X20":20,"AZUCAR MI ANGEL 1KG 1X24 UNIDADES":24,"HARINA PAN DE MAIZ 1X20KG":20,
+ "MEZCLA DE HARINA DOÑA EMILIA 900G 1X20":18,"HARINA DE TRIGO ROBIN HOOD TODO USO 1X20":18});
 
-const KEY='goa_compras_v1', VER=4;
+const KEY='goa_compras_v1', VER=5;
 const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 
 const mk=(p,i)=>({id:'p'+i, name:p[0], price:FIX[p[0]]??p[1], kg:KG[p[0]]||0});
 let state = store.get(KEY) || {products:BASE.map(mk), qty:{}, prov:'', tel:'', logo:null, deleted:[], v:VER};
 state.deleted=state.deleted||[];state.marks=state.marks||{};state.falt=state.falt||[];state.hist=state.hist||[];
-BASE.forEach((p,i)=>{const id='p'+i;if(!state.products.some(x=>x.id===id)&&!state.deleted.includes(id))state.products.push(mk(p,i))});
+const nkey=s=>String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
+BASE.forEach((p,i)=>{const id='p'+i;if(!state.products.some(x=>x.id===id||nkey(x.name)===nkey(p[0]))&&!state.deleted.includes(id))state.products.push(mk(p,i))});
 if((state.v||1)<4)state.logo=null;
 if((state.v||1)<VER){
   const v0=state.v||1;
   state.products.forEach(p=>{
     if(v0<2&&FIX[p.name]!==undefined)p.price=FIX[p.name];
+    if(v0<5&&PRICE2[p.name]!==undefined)p.price=PRICE2[p.name];
     if(!(p.kg>0))p.kg=KG[p.name]||0;
   });
   state.v=VER;
