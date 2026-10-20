@@ -85,6 +85,7 @@ header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;pa
 .ico{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:18px;padding:7px 10px!important;line-height:1}
 .ico span{font-size:11px;font-weight:600}
 .ico{position:relative;flex:1!important}
+@media(max-width:899px){.bar .row{gap:5px}.ico{min-width:0;padding:7px 2px!important}.ico span{font-size:10.5px}}
 .cnt{position:absolute;top:3px;right:6px;background:var(--red);color:#fff;font-style:normal;font-size:10.5px;font-weight:800;border-radius:9px;padding:1px 5px;min-width:16px}
 .cnt[hidden]{display:none}
 #panel{z-index:23}#dpanel{z-index:22}
@@ -183,6 +184,30 @@ header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;pa
 .dst{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:12.5px;font-weight:700;color:var(--muted)}
 .dst select{flex:1;min-width:0;padding:9px 10px;border:1.5px solid var(--line);border-radius:10px;font-size:15px;font-weight:700;background:#fff;color:var(--navy2)}
 .dst select.set{border-color:var(--gold);background:#fffaf0}
+.psel{width:100%;margin-top:6px;padding:14px;border:1.5px solid var(--line);border-radius:12px;font-size:17px;background:#fff;color:var(--text)}
+.arow{background:#fff;border-radius:14px;padding:12px;margin-bottom:8px;cursor:pointer;border:1.5px solid transparent;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.arow:active,.arow:hover{border-color:var(--gold)}
+.arow .h{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.arow .t{font-weight:800;font-size:15px;color:var(--navy)}
+.arow .t small{font-weight:600;color:var(--muted);font-size:12px;margin-left:4px}
+.arow .go{font-size:12.5px;font-weight:700;color:var(--navy2);white-space:nowrap}
+.arow .v{display:flex;gap:10px;margin-top:8px;font-size:12.5px;color:var(--muted)}
+.arow .v>div{flex:1}
+.arow .v b{display:block;font-size:16px;color:var(--text)}
+.meter{height:7px;background:#eef2f8;border-radius:4px;margin-top:4px;overflow:hidden}
+.meter i{display:block;height:100%;border-radius:4px}
+.meter.kg i{background:#4aa3df}.meter.mo i{background:var(--gold)}
+.oar{display:grid;grid-template-columns:1fr auto auto;gap:4px 12px;background:#fff;border-radius:14px;padding:10px 12px;margin-bottom:10px;font-size:13px;align-items:center}
+.oar .hd{font-size:11.5px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.oar a{color:var(--navy2);font-weight:700;text-decoration:none;cursor:pointer}
+.oar .r{text-align:right;font-weight:700;white-space:nowrap}
+.oar .tt{border-top:1.5px solid var(--line);padding-top:6px;font-weight:800}
+.abar{position:sticky;top:0;z-index:6;margin:0;background:var(--navy);color:#fff;padding:9px 12px;display:flex;align-items:center;gap:10px;font-size:13px}
+.abar[hidden]{display:none}
+.abar b{color:var(--gold2)}
+.abar .s{flex:1;line-height:1.35}
+.abar button{border:0;border-radius:10px;padding:8px 10px;font-size:13px;font-weight:700;cursor:pointer}
+.abar .bk{background:var(--gold);color:var(--navy)}.abar .x{background:rgba(255,255,255,.15);color:#fff}
 </style>
 <style id="goa-sw-css">
 .goa-sw{display:flex;gap:6px;padding:calc(6px + env(safe-area-inset-top)) 8px 6px;background:#071428;position:relative;z-index:4}
@@ -215,6 +240,7 @@ header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;pa
     <button class="chip" data-f="kg">⚖ Con peso<b id="cKg"></b></button>
   </div>
 </div>
+<div class="abar" id="abar" hidden></div>
 <div class="tip" id="tip"><span>👉 Escribe la cantidad y toca <b>Enter / Siguiente</b> para bajar al próximo producto. Toca <b>✎ Editar</b> para cambiar precio, nombre o kilos.<span class="pc"> En PC: <b>↑ ↓</b> para moverte y <b>/</b> para buscar.</span></span><button id="tipX" aria-label="Cerrar">✕</button></div>
 
 <div class="list" id="list"></div>
@@ -225,6 +251,7 @@ header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;pa
     <button class="btn btn-sm ico" id="ordBtn">📋<span>Pedido</span></button>
     <button class="btn btn-sm ico" id="kgBtn">⚖<span>Carga</span></button>
     <button class="btn btn-sm ico" id="faltBtn">🛍<span>Faltantes</span><i class="cnt" id="faltCnt" hidden></i></button>
+    <button class="btn btn-sm ico" id="areaBtn">📊<span>Áreas</span></button>
     <button class="btn btn-sm ico" id="hisBtn">🕘<span>Historial</span></button>
     <button class="btn btn-wa ico" id="waBtn">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.2c-.2.6-1.3 1.2-1.8 1.3-.5.1-1 .1-3.4-.9-2.8-1.2-4.6-4.1-4.8-4.3-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1.1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.2.1.7-.1 1.2z"/></svg><span>Enviar</span>
@@ -249,6 +276,9 @@ header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;pa
     </label>
     <label>Peso por bulto en kilos <span class="hint">(opcional — para calcular la carga)</span>
       <input id="pKg" inputmode="decimal" autocomplete="off" enterkeyhint="done" placeholder="Ej: 18">
+    </label>
+    <label>Área <span class="hint">(para el resumen de kilos y monto por área)</span>
+      <select id="pArea" class="psel"></select>
     </label>
     <button class="btn btn-save" id="pSave">Guardar</button>
     <button class="btn btn-del" id="pDel">Eliminar producto</button>
@@ -279,6 +309,7 @@ header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;pa
       <input id="aoName" placeholder="Nombre del producto" autocomplete="off" list="prodList" enterkeyhint="next">
       <div class="r3"><input id="aoQty" inputmode="decimal" placeholder="Cantidad" autocomplete="off" enterkeyhint="next"><input id="aoPrice" inputmode="decimal" placeholder="Precio $" autocomplete="off" enterkeyhint="done"><button class="btn btn-add" id="aoBtn">Agregar</button></div>
     </div>
+    <div id="oAreas"></div>
     <div id="oList"></div>
     <div id="oFaltBox"></div>
     <div class="sec">Enviar y guardar</div>
@@ -314,6 +345,16 @@ header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;pa
       <button class="btn b-file" id="fWa">Enviar lista por WhatsApp</button>
       <button class="btn btn-del" id="fClear">🗑 Vaciar lista de faltantes</button>
     </div>
+  </div>
+</div>
+
+<!-- Pestaña: resumen por área -->
+<div class="panel" id="apanel">
+  <header><h2>📊 Pedido por área</h2><button class="close" data-close="apanel">✕ Cerrar</button></header>
+  <div class="wbox">
+    <div class="osum" style="grid-template-columns:repeat(3,1fr)"><div><b id="aN">0</b><small>Productos</small></div><div><b class="k" id="aKg">0 kg</b><small>Peso total</small></div><div><b class="y" id="aT">$0</b><small>Monto total</small></div></div>
+    <div class="wnote" style="margin:0 0 10px">Toca un área para ir a sus productos y reajustar cantidades. Las barras muestran qué parte del total se lleva cada área.</div>
+    <div id="aList"></div>
   </div>
 </div>
 
@@ -432,7 +473,16 @@ const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){retu
 const mk=(p,i)=>({id:'p'+i, name:p[0], price:FIX[p[0]]??p[1], kg:KG[p[0]]||0});
 let state = store.get(KEY) || {products:BASE.map(mk), qty:{}, prov:'', tel:'', logo:null, deleted:[], v:VER};
 state.deleted=state.deleted||[];state.marks=state.marks||{};state.falt=state.falt||[];state.hist=state.hist||[];
-state.dests=state.dests||['Granos','Charcutería','Víveres','Refrescos','Otro'];
+state.dests=state.dests||['Granos','Víveres','Charcutería','Refrescos','Limpieza','Otro'];
+const AREA_RULES=[
+ ['Granos',/\b(HARINA|ARROZ|AZUCAR|PASTA|SAL|CARAOTA|CARAOTAS|LENTEJA|LENTEJAS|MAIZ|FRIJOL|ARVEJA|ALIMENTO|ENGORDE)\b/],
+ ['Charcutería',/\b(MORTADELA|JAMON|QUESO|SALCHICHA|MARGARINA|CHANTILLY)\b/],
+ ['Refrescos',/\b(REFRESCO|COCACOLA|COCA|SUN|JUGO|JUSTY|COOL|KOLITA|MALTA|AGUA)\b/],
+ ['Limpieza',/\b(DETERGENTE|JABON|LAVAPLATO|PAPEL|PEPEL|DESODORANTE|DENTAL|COLGATE|MAKSIM|CREMA DENTAL|PAÑALES|PANALES|TOALLA|TOALLAS|AFEITADORA|FRESCA|TOCADOR|CLORO|SUAVIZANTE)\b/]];
+function guessArea(n){n=String(n).toUpperCase();for(const [a,r] of AREA_RULES)if(r.test(n))return a;return 'Víveres'}
+state.products.forEach(p=>{if(!p.area)p.area=guessArea(p.name)});
+state.products.forEach(p=>{if(!state.dests.includes(p.area))state.dests.push(p.area)});
+let areaF=null;
 const nkey=s=>String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
 BASE.forEach((p,i)=>{const id='p'+i;if(!state.products.some(x=>x.id===id||nkey(x.name)===nkey(p[0]))&&!state.deleted.includes(id))state.products.push(mk(p,i))});
 if((state.v||1)<4)state.logo=null;
@@ -467,7 +517,7 @@ function sorted(){return [...state.products].sort((a,b)=>a.name.localeCompare(b.
 function render(){
   const q=norm($('q').value.trim());
   const items=sorted().filter(p=>(!q||norm(p.name).includes(q))&&(
-    filter==='all'||(filter==='on'&&num(state.qty[p.id])>0)||(filter==='nop'&&!(p.price>0))||(filter==='kg'&&p.kg>0)));
+    (!areaF||p.area===areaF)&&(filter==='all'||(filter==='on'&&num(state.qty[p.id])>0)||(filter==='nop'&&!(p.price>0))||(filter==='kg'&&p.kg>0))));
   $('qx').style.display=$('q').value?'block':'none';
   $('list').innerHTML = items.length ? items.map(p=>{
     const qv=state.qty[p.id]||'', qn=num(qv), st=qn*p.price;
@@ -484,10 +534,44 @@ function render(){
   totals();
 }
 
+function areaStats(){
+  const m={};state.dests.forEach(d=>m[d]={n:0,kg:0,t:0,pend:0,nokg:0});
+  for(const p of state.products){const q=num(state.qty[p.id]);if(!(q>0)||state.marks[p.id]==='no')continue;
+    const a=m[p.area]||(m[p.area]={n:0,kg:0,t:0,pend:0,nokg:0});a.n++;a.kg+=q*(p.kg||0);a.t+=q*p.price;if(!(p.price>0))a.pend++;if(!(p.kg>0))a.nokg++}
+  const rows=Object.entries(m).filter(([,a])=>a.n>0);
+  const tot=rows.reduce((x,[,a])=>({n:x.n+a.n,kg:x.kg+a.kg,t:x.t+a.t}),{n:0,kg:0,t:0});
+  return {rows,tot};
+}
+function renderAbar(){
+  const b=$('abar');if(!areaF){b.hidden=true;return}
+  const {rows}=areaStats(), a=(rows.find(([d])=>d===areaF)||[,{n:0,kg:0,t:0}])[1];
+  b.hidden=false;
+  b.innerHTML=`<div class="s">Área: <b>${esc(areaF)}</b><br>${a.n} prod. · ⚖ ${fkg(a.kg)} · <b>${fmt(a.t)}</b></div><button class="bk" id="abBack">📊 Áreas</button><button class="x" id="abX">✕</button>`;
+  $('abBack').onclick=()=>{renderA();openP('apanel')};
+  $('abX').onclick=()=>{areaF=null;render();window.scrollTo({top:0})};
+}
+function goArea(a){
+  areaF=a;filter='on';document.querySelectorAll('.chip[data-f]').forEach(c=>c.classList.toggle('act',c.dataset.f==='on'));
+  $('q').value='';['apanel','opanel'].forEach(closeP);render();window.scrollTo({top:0,behavior:'smooth'});
+  toast('Reajusta las cantidades de '+a);
+}
+function renderA(){
+  const {rows,tot}=areaStats();
+  $('aN').textContent=tot.n;$('aKg').textContent=fkg(tot.kg);$('aT').textContent=fmt(tot.t);
+  rows.sort((x,y)=>y[1].t-x[1].t);
+  $('aList').innerHTML=rows.length?rows.map(([d,a])=>{const pk=tot.kg?a.kg/tot.kg*100:0, pt=tot.t?a.t/tot.t*100:0;
+    return `<div class="arow" data-area="${esc(d)}"><div class="h"><div class="t">${esc(d)}<small>${a.n} producto${a.n===1?'':'s'}</small></div><div class="go">Reajustar ›</div></div>
+    <div class="v"><div>Peso<b>${fkg(a.kg)}</b><div class="meter kg"><i style="width:${pk.toFixed(1)}%"></i></div>${Math.round(pk)}% del peso${a.nokg?` · <span style="color:var(--orange)">${a.nokg} sin kilos</span>`:''}</div>
+    <div>Monto<b>${fmt(a.t)}</b><div class="meter mo"><i style="width:${pt.toFixed(1)}%"></i></div>${Math.round(pt)}% del dinero${a.pend?` · <span style="color:var(--orange)">${a.pend} sin precio</span>`:''}</div></div></div>`}).join('')
+    :'<div class="wnote">Todavía no hay cantidades en el pedido. Coloca cantidades en la lista principal y aquí verás el peso y el monto de cada área.</div>';
+}
+$('aList').addEventListener('click',e=>{const r=e.target.closest('[data-area]');if(r)goArea(r.dataset.area)});
+$('areaBtn').onclick=()=>{renderA();openP('apanel')};
 function totals(){
   let t=0,c=0,pend=0,kg=0;
   for(const p of state.products){const q=num(state.qty[p.id]);if(q>0){c++;t+=q*p.price;kg+=q*(p.kg||0);if(!(p.price>0))pend++}}
   $('total').textContent=fmt(t);
+  renderAbar();
   $('cAll').textContent=state.products.length; $('cOn').textContent=c||'';
   $('cNop').textContent=state.products.filter(p=>!(p.price>0)).length||''; $('cKg').textContent=state.products.filter(p=>p.kg>0).length||'';
   $('count').innerHTML=c+(c===1?' producto':' productos')+(kg>0?'<br>⚖ '+fkg(kg):'')+(pend?`<br><em>${pend} sin precio</em>`:'');
@@ -525,7 +609,7 @@ function backdrop(){$('backdrop').classList.toggle('show',!!document.querySelect
 const isOpen=id=>$(id).classList.contains('open');
 function openP(id){$(id).classList.add('open');backdrop()}
 function closeP(id){$(id).classList.remove('open');backdrop()}
-function closeTop(){if(isOpen('panel')){closePanel();return true}for(const id of ['dpanel','fpanel','opanel','hpanel','wpanel'])if(isOpen(id)){closeP(id);return true}return false}
+function closeTop(){if(isOpen('panel')){closePanel();return true}for(const id of ['dpanel','fpanel','apanel','opanel','hpanel','wpanel'])if(isOpen(id)){closeP(id);return true}return false}
 $('backdrop').onclick=closeTop;
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>closeP(b.dataset.close));
 document.addEventListener('keydown',e=>{
@@ -545,6 +629,7 @@ function openPanel(id,presetName){
   $('pName').value=p?p.name:(presetName||'').toUpperCase();
   $('pPrice').value=p&&p.price>0?p.price:'';
   $('pKg').value=p&&p.kg>0?p.kg:'';
+  $('pArea').innerHTML=state.dests.map(d=>`<option ${(p?p.area:(areaF||guessArea(presetName||'')))===d?'selected':''}>${esc(d)}</option>`).join('');
   $('pDel').style.display=p?'':'none';
   $('panel').classList.add('open');backdrop();
   setTimeout(()=>(p?$('pPrice'):$('pName')).focus(),260);
@@ -558,8 +643,8 @@ $('pKg').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$
 $('pSave').onclick=()=>{
   const name=$('pName').value.trim().toUpperCase(), price=num($('pPrice').value), kg=num($('pKg').value);
   if(!name){toast('Escribe el nombre');return}
-  if(editing){const p=state.products.find(x=>x.id===editing);p.name=name;p.price=price;p.kg=kg;toast('Producto actualizado')}
-  else{state.products.push({id:'n'+Date.now(),name,price,kg});toast(price>0?'Producto agregado':'Agregado sin precio')}
+  if(editing){const p=state.products.find(x=>x.id===editing);p.name=name;p.price=price;p.kg=kg;p.area=$('pArea').value||p.area;toast('Producto actualizado')}
+  else{state.products.push({id:'n'+Date.now(),name,price,kg,area:$('pArea').value||guessArea(name)});toast(price>0?'Producto agregado':'Agregado sin precio')}
   const wasNew=!editing;save();closePanel();if(wasNew)$('q').value='';render();if(isOpen('wpanel'))renderW();if(isOpen('opanel'))renderO();
 };
 $('pDel').onclick=async()=>{
@@ -641,6 +726,8 @@ function renderO(){
   $('oN').textContent=items.length;$('oOk').textContent=s.ok;$('oNo').textContent=s.no;$('oT').textContent=fmt(s.c);$('oKg').textContent=fkg(s.kg);
   const pend=items.filter(i=>i.mark!=='no'&&!(i.price>0)).length, nb=items.filter(i=>i.mark!=='no').length;
   $('oFt').textContent=fmt(s.c);
+  {const {rows,tot}=areaStats();rows.sort((x,y)=>y[1].t-x[1].t);
+   $('oAreas').innerHTML=rows.length>0?`<div class="oar"><span class="hd">Área</span><span class="hd r">Peso</span><span class="hd r">Monto</span>${rows.map(([d,a])=>`<a data-oa="${esc(d)}">${esc(d)} ›</a><span class="r">${fkg(a.kg)}</span><span class="r">${fmt(a.t)}</span>`).join('')}<span class="tt">Total</span><span class="r tt">${fkg(tot.kg)}</span><span class="r tt">${fmt(tot.t)}</span></div>`:'';}
   $('oFc').innerHTML=nb+(nb===1?' producto':' productos')+(s.no?`<br>${s.no} falta${s.no===1?'':'n'} (no suman)`:'')+(pend?`<br><em>${pend} sin precio</em>`:'');
   $('oList').innerHTML=items.length?items.map(i=>`<div class="ck ${i.mark}"><div class="n">${esc(i.name)}</div>
     ${oEdit===i.id?`<div class="pe"><label>Cantidad<input id="peQ" inputmode="decimal" value="${i.qty}" autocomplete="off" enterkeyhint="next"></label><label>Precio $<input id="peP" inputmode="decimal" value="${i.price>0?i.price:''}" placeholder="0.00" autocomplete="off" enterkeyhint="done"></label><button class="btn b-ok2" data-pes="${i.id}">✓</button></div>`
@@ -665,6 +752,7 @@ function savePe(id){
   if(q>0)state.qty[id]=String(q);else{delete state.qty[id];delete state.marks[id]}
   oEdit=null;save();render();renderO();toast(q>0?'Producto actualizado':'Quitado del pedido');
 }
+$('oAreas').addEventListener('click',e=>{const a=e.target.closest('[data-oa]');if(a)goArea(a.dataset.oa)});
 $('oList').addEventListener('click',e=>{
   const pn=e.target.closest('[data-pen]');
   if(pn){oEdit=pn.dataset.pen;renderO();setTimeout(()=>{const x=$('peP');if(x){x.focus();x.select()}},30);return}
@@ -690,7 +778,7 @@ $('aoBtn').onclick=()=>{
   const q=num($('aoQty').value)||1, pr=num($('aoPrice').value);
   let p=findP(name);
   if(p){if(pr>0)p.price=pr}
-  else{p={id:'n'+Date.now(),name,price:pr,kg:0};state.products.push(p)}
+  else{p={id:'n'+Date.now(),name,price:pr,kg:0,area:guessArea(name)};state.products.push(p)}
   state.qty[p.id]=String(q);
   save();render();renderO();fillProdList();
   $('aoName').value=$('aoQty').value=$('aoPrice').value='';$('aoName').focus();
@@ -771,7 +859,7 @@ $('dLoad').onclick=async()=>{if(!curD)return;
   if(Object.keys(state.qty).length&&!await ask('Tu lista actual tiene cantidades. ¿Reemplazarla con este pedido?'))return;
   state.qty={};state.marks={};
   curD.items.forEach(i=>{let p=state.products.find(x=>x.name===i.name);
-    if(!p){p={id:'n'+Date.now()+Math.random().toString(36).slice(2,6),name:i.name,price:i.price,kg:i.kg||0};state.products.push(p)}
+    if(!p){p={id:'n'+Date.now()+Math.random().toString(36).slice(2,6),name:i.name,price:i.price,kg:i.kg||0,area:guessArea(i.name)};state.products.push(p)}
     state.qty[p.id]=String(i.qty);if(curD.status!=='comprado'&&i.mark)state.marks[p.id]=i.mark});
   state.curHist=curD.status==='comprado'?null:curD.id;save();
   closeP('dpanel');closeP('hpanel');filter='on';document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('act',c.dataset.f==='on'));render();
@@ -826,7 +914,7 @@ function toBuy(list){
   if(!list.length)return;
   list.forEach(i=>{
     let p=findP(i.name);
-    if(!p){p={id:'n'+Date.now()+Math.random().toString(36).slice(2,6),name:i.name,price:i.price||0,kg:i.kg||0};state.products.push(p)}
+    if(!p){p={id:'n'+Date.now()+Math.random().toString(36).slice(2,6),name:i.name,price:i.price||0,kg:i.kg||0,area:i.dest||guessArea(i.name)};state.products.push(p)}
     else if(!(p.price>0)&&i.price>0)p.price=i.price;
     const prev=num(state.qty[p.id]);
     state.qty[p.id]=String(prev>0?prev+(i.qty||1):(i.qty||1));
