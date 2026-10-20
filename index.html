@@ -215,6 +215,8 @@ header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;pa
 .goa-sw a.on{background:#f2b632;color:#0b1f3a}
 @media(min-width:900px){.goa-sw{padding-right:368px}}
 </style>
+<link rel="manifest" href="manifest.json">
+<script>if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script>
 </head>
 <body>
 <nav class="goa-sw"><a href="./" class="on">🛒 Orden de compra</a><a href="checklist.html">✅ Checklist Sol 22</a></nav>
