@@ -160,6 +160,26 @@ header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;pa
   .toast{bottom:40px;left:calc(50% - 170px)}
 }
 @media(max-width:899px){.keys{display:none}}
+/* Agregar producto dentro de Pedido / Faltantes */
+.addo{background:#fff;border:1.5px dashed #c9d3e3;border-radius:14px;padding:10px;margin-bottom:10px;display:flex;flex-direction:column;gap:7px}
+.addo .at{font-size:13px;font-weight:800;color:var(--navy2)}
+.addo input{width:100%;min-width:0;padding:11px;border:1.5px solid var(--line);border-radius:10px;font-size:16px;background:#fff;outline:none}
+.addo input:focus{border-color:var(--navy2)}
+.addo .r3{display:grid;grid-template-columns:1fr 1fr auto;gap:7px}
+.addo .btn{padding:11px 14px}
+.pen{margin-left:6px;padding:3px 9px!important}
+.pe{display:grid;grid-template-columns:1fr 1fr auto;gap:7px;margin:6px 0 8px;align-items:end}
+.pe label{font-size:11.5px;color:var(--muted);font-weight:700}
+.pe input{width:100%;margin-top:3px;padding:10px;border:1.5px solid var(--navy2);border-radius:10px;font-size:16px;outline:none;background:#fff}
+.pe .btn{padding:11px 14px}
+.ofoot{position:sticky;bottom:0;margin-top:auto;background:var(--navy);color:#fff;padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:flex;justify-content:space-between;align-items:center;gap:10px;box-shadow:0 -4px 14px rgba(0,0,0,.18);z-index:2}
+.ofoot small{display:block;font-size:12px;opacity:.85;line-height:1.35}
+.ofoot small em{font-style:normal;color:#ffb36b}
+.ofoot b{font-size:24px;color:var(--gold2);white-space:nowrap}
+.fx{display:flex;gap:8px;margin-top:8px}
+.fx button{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:8px 10px;font-size:13px;font-weight:700;cursor:pointer;color:var(--navy2)}
+.fx .tobuy{flex:1;background:#fff8e6;border-color:#f6dfa0;color:#7a5a00}
+.fx .fdel{color:var(--red)}
 </style>
 </head>
 <body>
@@ -244,7 +264,12 @@ header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;pa
   <header><h2>📋 Revisar pedido</h2><button class="close" data-close="opanel">✕ Cerrar</button></header>
   <div class="wbox">
     <div class="osum"><div><b id="oN">0</b><small>Productos</small></div><div><b class="g" id="oOk">0</b><small>Hay</small></div><div><b class="r" id="oNo">0</b><small>Faltan</small></div><div><b class="k" id="oKg">0 kg</b><small>Peso</small></div><div><b class="y" id="oT">$0</b><small>Total</small></div></div>
-    <div class="wnote" style="margin:0 0 10px">Toca <b>✓ Hay</b> o <b>✗ Falta</b> en cada producto a medida que te confirman. Lo que marques como falta pasa a la lista de <b>Faltantes</b>.</div>
+    <div class="wnote" style="margin:0 0 10px">Toca <b>✓ Hay</b> o <b>✗ Falta</b> en cada producto a medida que te confirman. Toca <b>✎</b> si quieres cambiar el precio o la cantidad. Lo que marques como falta pasa a la lista de <b>Faltantes</b>.</div>
+    <div class="addo">
+      <div class="at">➕ Agregar un producto al pedido</div>
+      <input id="aoName" placeholder="Nombre del producto" autocomplete="off" list="prodList" enterkeyhint="next">
+      <div class="r3"><input id="aoQty" inputmode="decimal" placeholder="Cantidad" autocomplete="off" enterkeyhint="next"><input id="aoPrice" inputmode="decimal" placeholder="Precio $" autocomplete="off" enterkeyhint="done"><button class="btn btn-add" id="aoBtn">Agregar</button></div>
+    </div>
     <div id="oList"></div>
     <div id="oFaltBox"></div>
     <div class="sec">Enviar y guardar</div>
@@ -257,16 +282,24 @@ header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;pa
     </div>
     <div class="wnote">El archivo que envías es un html con tu logo donde el proveedor solo puede marcar <b>✓ Hay / ✗ No hay</b>, guardarlo y responderte por WhatsApp. Al confirmar la compra, el pedido pasa al <b>Historial</b> y la lista queda limpia para el próximo.</div>
   </div>
+  <div class="ofoot"><small id="oFc">0 productos</small><div style="text-align:right"><small>Va sumando tu compra</small><b id="oFt">$0.00</b></div></div>
 </div>
+<datalist id="prodList"></datalist>
 
 <!-- Pestaña: faltantes (otra tienda) -->
 <div class="panel" id="fpanel">
   <header><h2>🛍 Faltantes</h2><button class="close" data-close="fpanel">✕ Cerrar</button></header>
   <div class="wbox">
     <div class="osum"><div><b id="fN">0</b><small>Productos</small></div><div><b class="g" id="fOk">0</b><small>Compré</small></div><div><b class="r" id="fNo">0</b><small>No hay</small></div><div><b class="k" id="fKg">0 kg</b><small>Peso</small></div><div><b class="y" id="fT">$0</b><small>Total</small></div></div>
-    <div class="wnote" style="margin:0 0 10px">Lista guardada para comprar en otra tienda. Marca <b>✓ Compré</b> o <b>✗ No hay</b>. Al tocar <b>Guardar compra</b>, lo comprado pasa al <b>Historial</b> y lo que no conseguiste se queda aquí para la próxima tienda.</div>
+    <div class="wnote" style="margin:0 0 10px">Anota aquí lo que se te acabó o lo que te piden y no tienes. Con <b>🛒 Pasar a compras</b> lo mandas a tu lista de compras con un toque. También puedes marcar <b>✓ Compré</b> o <b>✗ No hay</b> si lo buscas en otra tienda.</div>
+    <div class="addo">
+      <div class="at">📝 Anotar faltante</div>
+      <input id="faName" placeholder="Nombre del producto" autocomplete="off" list="prodList" enterkeyhint="next">
+      <div class="r3"><input id="faQty" inputmode="decimal" placeholder="Cantidad" autocomplete="off" enterkeyhint="next"><input id="faPrice" inputmode="decimal" placeholder="Precio $ (opc.)" autocomplete="off" enterkeyhint="done"><button class="btn btn-add" id="faBtn">Anotar</button></div>
+    </div>
     <div id="fList"></div>
     <div class="acts">
+      <button class="btn b-load" id="fBuyAll">🛒 Pasar TODOS a la lista de compras</button>
       <button class="btn b-ok2" id="fSave">💾 Guardar compra</button>
       <button class="btn b-file" id="fWa">Enviar lista por WhatsApp</button>
       <button class="btn btn-del" id="fClear">🗑 Vaciar lista de faltantes</button>
@@ -566,8 +599,12 @@ function faltText(items,prov,fecha){
 function renderO(){
   const items=curItems(), s=sums(items);
   $('oN').textContent=items.length;$('oOk').textContent=s.ok;$('oNo').textContent=s.no;$('oT').textContent=fmt(s.c);$('oKg').textContent=fkg(s.kg);
+  const pend=items.filter(i=>i.mark!=='no'&&!(i.price>0)).length, nb=items.filter(i=>i.mark!=='no').length;
+  $('oFt').textContent=fmt(s.c);
+  $('oFc').innerHTML=nb+(nb===1?' producto':' productos')+(s.no?`<br>${s.no} falta${s.no===1?'':'n'} (no suman)`:'')+(pend?`<br><em>${pend} sin precio</em>`:'');
   $('oList').innerHTML=items.length?items.map(i=>`<div class="ck ${i.mark}"><div class="n">${esc(i.name)}</div>
-    <div class="d">Cantidad: <b>${i.qty}</b>${i.price>0?` · ${fmt(i.price)} = <b>${fmt(i.qty*i.price)}</b>`:' · <span class="nop">Sin precio</span>'}</div>
+    ${oEdit===i.id?`<div class="pe"><label>Cantidad<input id="peQ" inputmode="decimal" value="${i.qty}" autocomplete="off" enterkeyhint="next"></label><label>Precio $<input id="peP" inputmode="decimal" value="${i.price>0?i.price:''}" placeholder="0.00" autocomplete="off" enterkeyhint="done"></label><button class="btn b-ok2" data-pes="${i.id}">✓</button></div>`
+    :`<div class="d">Cantidad: <b>${i.qty}</b>${i.price>0?` · ${fmt(i.price)} = <b>${fmt(i.qty*i.price)}</b>`:' · <span class="nop">Sin precio</span>'}<button class="edit pen" data-pen="${i.id}" aria-label="Editar precio">✎</button></div>`}
     <div class="bt"><button class="b-ok" data-mk="ok" data-id="${i.id}">✓ Hay</button><button class="b-no" data-mk="no" data-id="${i.id}">✗ Falta</button></div></div>`).join('')
     :'<div class="wnote">Todavía no hay productos en el pedido. Coloca cantidades en la lista principal.</div>';
   const f=items.filter(i=>i.mark==='no');
@@ -578,9 +615,48 @@ function renderO(){
   const fb=$('oFaltWa');if(fb)fb.onclick=()=>openWA('',faltText(items,'',today()));
   const fl=$('oFaltList');if(fl)fl.onclick=()=>toFalt(f);
 }
-$('oList').addEventListener('click',e=>{const b=e.target.closest('[data-mk]');if(!b)return;const id=b.dataset.id;
+let oEdit=null;
+function fillProdList(){$('prodList').innerHTML=sorted().map(p=>`<option value="${esc(p.name)}">`).join('')}
+const findP=name=>state.products.find(x=>x.name===name);
+function savePe(id){
+  const p=state.products.find(x=>x.id===id);if(!p)return;
+  const q=num($('peQ').value), pr=num($('peP').value);
+  p.price=pr;
+  if(q>0)state.qty[id]=String(q);else{delete state.qty[id];delete state.marks[id]}
+  oEdit=null;save();render();renderO();toast(q>0?'Producto actualizado':'Quitado del pedido');
+}
+$('oList').addEventListener('click',e=>{
+  const pn=e.target.closest('[data-pen]');
+  if(pn){oEdit=pn.dataset.pen;renderO();setTimeout(()=>{const x=$('peP');if(x){x.focus();x.select()}},30);return}
+  const ps=e.target.closest('[data-pes]');if(ps){savePe(ps.dataset.pes);return}
+  const b=e.target.closest('[data-mk]');if(!b)return;const id=b.dataset.id;
   state.marks[id]=state.marks[id]===b.dataset.mk?'':b.dataset.mk;if(!state.marks[id])delete state.marks[id];save();renderO()});
-$('ordBtn').onclick=()=>{$('myTel').value=state.myTel||'';renderO();openP('opanel')};
+$('oList').addEventListener('keydown',e=>{
+  if(e.key!=='Enter')return;
+  if(e.target.id==='peQ'){e.preventDefault();$('peP').focus();$('peP').select()}
+  else if(e.target.id==='peP'){e.preventDefault();savePe(oEdit)}
+  else if(e.key==='Escape'){oEdit=null;renderO()}
+});
+// Autocompletar precio si el producto ya existe
+function autoPrice(nameEl,priceEl){nameEl.addEventListener('change',()=>{
+  const p=findP(nameEl.value.trim().toUpperCase());if(p&&p.price>0&&!priceEl.value)priceEl.value=p.price})}
+autoPrice($('aoName'),$('aoPrice'));
+$('aoName').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('aoQty').focus()}});
+$('aoQty').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('aoPrice').focus()}});
+$('aoPrice').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('aoBtn').click()}});
+$('aoBtn').onclick=()=>{
+  const name=$('aoName').value.trim().toUpperCase();
+  if(!name){toast('Escribe el nombre');$('aoName').focus();return}
+  const q=num($('aoQty').value)||1, pr=num($('aoPrice').value);
+  let p=findP(name);
+  if(p){if(pr>0)p.price=pr}
+  else{p={id:'n'+Date.now(),name,price:pr,kg:0};state.products.push(p)}
+  state.qty[p.id]=String(q);
+  save();render();renderO();fillProdList();
+  $('aoName').value=$('aoQty').value=$('aoPrice').value='';$('aoName').focus();
+  toast(pr>0||p.price>0?'Agregado al pedido':'Agregado sin precio');
+};
+$('ordBtn').onclick=()=>{$('myTel').value=state.myTel||'';oEdit=null;fillProdList();renderO();openP('opanel')};
 $('myTel').oninput=e=>{state.myTel=e.target.value;save()};
 
 async function shareFile(html,name,text){
@@ -677,13 +753,47 @@ function renderF(){
   $('fT').textContent=fmt(it.filter(i=>i.mark==='ok').reduce((a,i)=>a+i.qty*i.price,0));
   $('fList').innerHTML=it.length?it.map((i,n)=>`<div class="ck ${i.mark}"><div class="n">${esc(i.name)}</div>
     <div class="d">Cantidad: <b>${i.qty}</b>${i.price>0?` · ${fmt(i.price)} = <b>${fmt(i.qty*i.price)}</b>`:''}${i.kg?` · ⚖ ${fkg(i.qty*i.kg)}`:''}</div>
-    <div class="bt"><button class="b-ok" data-fm="ok" data-n="${n}">✓ Compré</button><button class="b-no" data-fm="no" data-n="${n}">✗ No hay</button></div></div>`).join('')
-    :'<div class="wnote">No hay faltantes pendientes. Desde <b>📋 Pedido</b>, cuando marques productos como <b>Falta</b>, puedes pasarlos aquí.</div>';
+    <div class="bt"><button class="b-ok" data-fm="ok" data-n="${n}">✓ Compré</button><button class="b-no" data-fm="no" data-n="${n}">✗ No hay</button></div>
+    <div class="fx"><button class="tobuy" data-fb="${n}">🛒 Pasar a compras</button><button class="fdel" data-fd="${n}" aria-label="Quitar">✕</button></div></div>`).join('')
+    :'<div class="wnote">No hay faltantes pendientes. Anótalos arriba, o desde <b>📋 Pedido</b> marca productos como <b>Falta</b> y pásalos aquí.</div>';
+  $('fBuyAll').style.display=it.length?'':'none';
   updFaltCnt();
 }
-$('fList').addEventListener('click',e=>{const b=e.target.closest('[data-fm]');if(!b)return;const i=state.falt[+b.dataset.n];
+// Pasar faltantes a la lista de compras (página principal)
+function toBuy(list){
+  if(!list.length)return;
+  list.forEach(i=>{
+    let p=findP(i.name);
+    if(!p){p={id:'n'+Date.now()+Math.random().toString(36).slice(2,6),name:i.name,price:i.price||0,kg:i.kg||0};state.products.push(p)}
+    else if(!(p.price>0)&&i.price>0)p.price=i.price;
+    const prev=num(state.qty[p.id]);
+    state.qty[p.id]=String(prev>0?prev+(i.qty||1):(i.qty||1));
+  });
+  state.falt=state.falt.filter(f=>!list.includes(f));
+  save();render();renderF();
+  toast(`🛒 ${list.length} producto${list.length===1?'':'s'} en la lista de compras`);
+}
+$('fList').addEventListener('click',e=>{
+  const fb=e.target.closest('[data-fb]');if(fb){toBuy([state.falt[+fb.dataset.fb]]);return}
+  const fd=e.target.closest('[data-fd]');if(fd){state.falt.splice(+fd.dataset.fd,1);save();renderF();return}
+  const b=e.target.closest('[data-fm]');if(!b)return;const i=state.falt[+b.dataset.n];
   i.mark=i.mark===b.dataset.fm?'':b.dataset.fm;save();renderF()});
-$('faltBtn').onclick=()=>{renderF();openP('fpanel')};
+$('fBuyAll').onclick=async()=>{const l=state.falt.filter(i=>i.mark!=='ok');if(!l.length){toast('No hay faltantes para pasar');return}
+  if(!await ask(`¿Pasar ${l.length} faltante${l.length===1?'':'s'} a la lista de compras?`))return;toBuy(l)};
+autoPrice($('faName'),$('faPrice'));
+$('faName').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('faQty').focus()}});
+$('faQty').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('faPrice').focus()}});
+$('faPrice').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('faBtn').click()}});
+$('faBtn').onclick=()=>{
+  const name=$('faName').value.trim().toUpperCase();
+  if(!name){toast('Escribe el nombre');$('faName').focus();return}
+  const q=num($('faQty').value)||1, p=findP(name), pr=num($('faPrice').value)||(p?p.price:0);
+  const x=state.falt.find(f=>f.name===name);
+  if(x){x.qty=q;if(pr>0)x.price=pr}else state.falt.push({name,qty:q,price:pr,kg:p?p.kg||0:0,mark:''});
+  save();renderF();
+  $('faName').value=$('faQty').value=$('faPrice').value='';$('faName').focus();toast('Faltante anotado');
+};
+$('faltBtn').onclick=()=>{fillProdList();renderF();openP('fpanel')};
 $('fSave').onclick=async()=>{
   const ok=state.falt.filter(i=>i.mark==='ok');
   if(!ok.length){toast('Marca con ✓ Compré lo que compraste');return}
