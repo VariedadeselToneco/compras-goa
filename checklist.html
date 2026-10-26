@@ -3930,7 +3930,7 @@
 
 
         // Pedido sugerido para Sol 22 (armado con las ventas del 19 al 25/10). Las cantidades salen de la tasa del día.
-        const PEDIDO_SUGERIDO = {"id": "2026-10-27", "fecha": "27/10/2026", "items": [{"n": "CHIMO APURENO", "usd": 91.68, "de": "APUREÑO"}, {"n": "BOMBILLO RECARGABLE AWA 40W", "usd": 14.26, "de": "BOMBILLO RECARGABLE 40W"}, {"n": "PRESTOBARBA DORCO", "usd": 8.65, "de": "PRESTOBARBA DORCO"}, {"n": "CEPILLO DENTAL MAKSIM [1X12]", "usd": 8.31, "de": "CEPILLO DENTAL"}, {"n": "YESQUERO G X50UND", "usd": 6.74, "de": "YESQUERO"}, {"n": "COCOSETTE 18UNIDA", "usd": 3.87, "de": "COCOSETTE 50gr"}]};
+        const PEDIDO_SUGERIDO = {"id": "2026-10-27b", "fecha": "27/10/2026", "items": [{"n": "BOMBILLO RECARGABLE AWA 40W", "usd": 14.26, "de": "BOMBILLO RECARGABLE 40W"}, {"n": "PRESTOBARBA DORCO", "usd": 8.65, "de": "PRESTOBARBA DORCO"}, {"n": "CEPILLO DENTAL MAKSIM [1X12]", "usd": 8.31, "de": "CEPILLO DENTAL"}, {"n": "YESQUERO G X50UND", "usd": 6.74, "de": "YESQUERO"}, {"n": "COCOSETTE 18UNIDA", "usd": 3.87, "de": "COCOSETTE 50gr"}]};
         function sugSolItems() {
             const rate = getCurrentRate();
             return PEDIDO_SUGERIDO.items.map(it => {
