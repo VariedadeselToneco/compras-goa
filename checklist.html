@@ -101,6 +101,11 @@
             </div>
         </div>
     </header>
+<div id="sugSol" style="display:none;margin:10px auto 0;max-width:80rem;padding:0 12px"><div style="background:#312e81;color:#fff;border-radius:14px;padding:12px;display:flex;gap:10px;align-items:center;font-family:system-ui,Arial,sans-serif">
+<div style="flex:1;min-width:0;font-size:13.5px;line-height:1.35"><b style="color:#fcd34d;font-size:15px">Pedido sugerido Sol 22 · 8 días</b><br><span id="sugSolTxt"></span></div>
+<button type="button" id="sugSolGo" style="border:0;border-radius:10px;padding:10px 12px;font-weight:700;background:#f59e0b;color:#1e1b4b;cursor:pointer">Cargar</button>
+<button type="button" id="sugSolNo" aria-label="Ocultar" style="border:0;border-radius:10px;padding:10px 12px;font-weight:700;background:rgba(255,255,255,.15);color:#fff;cursor:pointer">✕</button></div></div>
+
 
     <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 mt-4 sm:mt-6">
 
@@ -2504,6 +2509,7 @@
             applyGranosPatch();
             fetchBCVRate();
             switchTab('catalog');
+            renderSugSol();
         }
 
         function updateProductPrice(id, kind, val) {
@@ -3921,6 +3927,39 @@
             saveProductsLocally();
             localStorage.setItem(flag, '1');
         }
+
+
+        // Pedido sugerido para Sol 22 (armado con las ventas del 19 al 25/10). Las cantidades salen de la tasa del día.
+        const PEDIDO_SUGERIDO = {"id": "2026-10-27", "fecha": "27/10/2026", "items": [{"n": "CHIMO APURENO", "usd": 91.68, "de": "APUREÑO"}, {"n": "BOMBILLO RECARGABLE AWA 40W", "usd": 14.26, "de": "BOMBILLO RECARGABLE 40W"}, {"n": "PRESTOBARBA DORCO", "usd": 8.65, "de": "PRESTOBARBA DORCO"}, {"n": "CEPILLO DENTAL MAKSIM [1X12]", "usd": 8.31, "de": "CEPILLO DENTAL"}, {"n": "YESQUERO G X50UND", "usd": 6.74, "de": "YESQUERO"}, {"n": "COCOSETTE 18UNIDA", "usd": 3.87, "de": "COCOSETTE 50gr"}]};
+        function sugSolItems() {
+            const rate = getCurrentRate();
+            return PEDIDO_SUGERIDO.items.map(it => {
+                const p = products.find(x => x.category === 'catalog' && normName(x.name) === normName(it.n));
+                if (!p || !(p.priceBs > 0)) return null;
+                const q = Math.round(it.usd * rate / p.priceBs);
+                return q > 0 ? { p, q } : null;
+            }).filter(Boolean);
+        }
+        function renderSugSol() {
+            const box = document.getElementById('sugSol'); if (!box) return;
+            if (localStorage.getItem('sol22_sug_' + PEDIDO_SUGERIDO.id)) { box.style.display = 'none'; return; }
+            const L = sugSolItems(); if (!L.length) { box.style.display = 'none'; return; }
+            const totBs = L.reduce((a, x) => a + x.q * x.p.priceBs, 0);
+            document.getElementById('sugSolTxt').textContent = L.length + ' productos · Bs ' + totBs.toLocaleString('es-VE', {maximumFractionDigits: 2}) + ' (≈ $' + (totBs / getCurrentRate()).toFixed(2) + ') · ' + L.map(x => x.q + ' ' + x.p.name).join(', ');
+            box.style.display = 'block';
+        }
+        function cargarSugSol() {
+            const L = sugSolItems(); if (!L.length) return;
+            if (!confirm('¿Cargar el pedido sugerido de Sol 22?\n' + L.map(x => x.q + ' x ' + x.p.name).join('\n') + '\n\nSe ponen esas cantidades en el catálogo. Revísalas antes de guardar la lista.')) return;
+            L.forEach(x => { x.p.selectedQty = x.q; x.p.purchased = false; });
+            saveProductsLocally();
+            localStorage.setItem('sol22_sug_' + PEDIDO_SUGERIDO.id, '1');
+            renderSugSol(); switchTab('catalog');
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('sugSolGo').onclick = cargarSugSol;
+            document.getElementById('sugSolNo').onclick = () => { localStorage.setItem('sol22_sug_' + PEDIDO_SUGERIDO.id, '1'); renderSugSol(); };
+        });
 
         window.onload = initApp;
     </script>
