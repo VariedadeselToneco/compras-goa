@@ -204,6 +204,12 @@ header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;pa
 .oar .tt{border-top:1.5px solid var(--line);padding-top:6px;font-weight:800}
 .abar{position:sticky;top:0;z-index:6;margin:0;background:var(--navy);color:#fff;padding:9px 12px;display:flex;align-items:center;gap:10px;font-size:13px}
 .abar[hidden]{display:none}
+.sug{margin:8px 10px 0;background:var(--navy);color:#fff;border-radius:14px;padding:12px;display:flex;gap:10px;align-items:center}
+.sug[hidden]{display:none}
+.sug .t{flex:1;min-width:0;font-size:13.5px;line-height:1.35}.sug .t b{color:var(--gold2);font-size:15px}
+.sug button{border:0;border-radius:10px;padding:10px 12px;font-weight:700;cursor:pointer;font-size:14px}
+.sug .go{background:var(--gold);color:var(--navy)}.sug .no{background:rgba(255,255,255,.15);color:#fff}
+@media(min-width:900px){.sug{margin:12px 28px 0}}
 .abar b{color:var(--gold2)}
 .abar .s{flex:1;line-height:1.35}
 .abar button{border:0;border-radius:10px;padding:8px 10px;font-size:13px;font-weight:700;cursor:pointer}
@@ -242,6 +248,7 @@ header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;pa
     <button class="chip" data-f="kg">⚖ Con peso<b id="cKg"></b></button>
   </div>
 </div>
+<div class="sug" id="sug" hidden></div>
 <div class="abar" id="abar" hidden></div>
 <div class="tip" id="tip"><span>👉 Escribe la cantidad y toca <b>Enter / Siguiente</b> para bajar al próximo producto. Toca <b>✎ Editar</b> para cambiar precio, nombre o kilos.<span class="pc"> En PC: <b>↑ ↓</b> para moverte y <b>/</b> para buscar.</span></span><button id="tipX" aria-label="Cerrar">✕</button></div>
 
@@ -536,6 +543,25 @@ function render(){
   totals();
 }
 
+const SUGERIDO={"id": "2026-10-27", "fecha": "27/10/2026", "dias": 8, "total": 3292.08, "items": [{"n": "HARINA DE MAIZ MIMASA 900G 1X20", "q": 16, "p": 13.9}, {"n": "QUESO (KG)", "q": 21, "p": 6.5}, {"n": "PASTA LA ESPECIAL VERMICELLI 1KG 1X12", "q": 9, "p": 14.66}, {"n": "ACEITE AGROIL 800 ML", "q": 5, "p": 25.1}, {"n": "HARINA AREPAMIA 900G 1X20", "q": 10, "p": 12.0}, {"n": "HARINA PRECOCIDA YARACUY 900G 1X20", "q": 8, "p": 13.9}, {"n": "MEZCLA DE HARINA DOÑA EMILIA 900G 1X20", "q": 7, "p": 14.51}, {"n": "HUEVO CALIDAD (1/2CARTON)", "q": 38, "p": 2.43}, {"n": "APUREÑO (UND)", "q": 219, "p": 0.42}, {"n": "CIGARRO CONSUL 1X10 UND", "q": 7, "p": 12.9}, {"n": "ARROZ BLANCO TIPO I MARY TRADICIONAL 900G", "q": 6, "p": 14.65}, {"n": "LECHE EN POLVO DO BON 400G 1X25", "q": 1, "p": 85.49}, {"n": "SARDINA OMEGA EN TOMATE 1X24", "q": 6, "p": 14.0}, {"n": "ARROZ BLANCO MIMASA TRADICIONAL 900GX24", "q": 5, "p": 14.6}, {"n": "MARGARINA DELINE 250GR (UND)", "q": 47, "p": 1.38}, {"n": "CONSUL PALLMAL CAJA (CAJA)", "q": 83, "p": 0.75}, {"n": "AZUCAR LA PASTORA REFINO 1KG 1X20", "q": 2, "p": 22.5}, {"n": "DETERGENTE ALIVE 500GR (MONTO SUGERIDO)", "q": 1, "p": 43.12}, {"n": "SARDINA ECONOMICA (LATA)", "q": 80, "p": 0.51}, {"n": "SUNTY 1.5LT (UND)", "q": 51, "p": 0.79}, {"n": "MAYONESA MAVESA 175G 1X24", "q": 1, "p": 40.0}, {"n": "DETERGENTE ALIVE 1KG (UND)", "q": 18, "p": 2.1}, {"n": "AZUCAR COMINKA 900G 1X20UND", "q": 2, "p": 18.6}, {"n": "AZUCAR EL GALAN 1KG 1X20", "q": 2, "p": 18.55}, {"n": "ROYAL (CAJA)", "q": 77, "p": 0.48}, {"n": "PASTA CORTA SINDONI KG PREMIUM (MONTO SUGERIDO)", "q": 1, "p": 36.21}, {"n": "PASTA SINDONI KILO LARGA (KG)", "q": 29, "p": 1.21}, {"n": "MARGARINA MAVESA 250G 1X24", "q": 1, "p": 34.92}, {"n": "PLATANITO (MONTO SUGERIDO)", "q": 1, "p": 34.57}, {"n": "COCACOLA 2L", "q": 4, "p": 8.5}, {"n": "POLLO PICADO (KG)", "q": 9, "p": 3.67}, {"n": "BAMBINOS GRANDE (MONTO SUGERIDO)", "q": 1, "p": 32.69}, {"n": "LECHE EN POLVO LA CAMPIÑA 400GR (1/2 KILO)", "q": 5, "p": 6.53}, {"n": "CAFE AMERICO ADRIANI 200G (UND)", "q": 16, "p": 2.0}, {"n": "MARGARINA MAVESA 500G 1X12", "q": 1, "p": 31.25}, {"n": "SPEED STICK POMO 32G (UND)", "q": 25, "p": 1.23}, {"n": "CAFE HEIDY 30 UND X 100GR", "q": 1, "p": 29.95}, {"n": "CAFE HEIDY 15 UND X 200GR", "q": 1, "p": 29.95}, {"n": "CHIMO TIGRE (UND)", "q": 63, "p": 0.46}, {"n": "CAFE DELLA NONNA 100GR (MONTO SUGERIDO)", "q": 1, "p": 27.36}, {"n": "BELMONT CAJA (CAJA)", "q": 10, "p": 2.64}, {"n": "ACEITE VATEL SOYA 800ML 1X12", "q": 1, "p": 26.0}, {"n": "REFRESCO BIG COLA 2L 1X6 UND", "q": 5, "p": 4.9}, {"n": "JUSTY NARANJA 1.5L (UND)", "q": 29, "p": 0.84}, {"n": "PANELA TRADICIONAL 250GR LAS LLAVES (UND)", "q": 22, "p": 1.08}, {"n": "PASTA SINDONI LARGA 1KG (KG)", "q": 16, "p": 1.42}, {"n": "MORTADELA DON RAMON 900G (UND)", "q": 11, "p": 2.04}, {"n": "SUERO ANGEL (UND)", "q": 16, "p": 1.4}, {"n": "BALANCE POMO 32G (UND)", "q": 16, "p": 1.38}, {"n": "RIKESA 200GR (MONTO SUGERIDO)", "q": 1, "p": 21.81}, {"n": "SUN COLA 2 LITROS (UND)", "q": 26, "p": 0.81}, {"n": "BAMBINO GRANDE (PAQUETE)", "q": 21, "p": 1.0}, {"n": "ARROZ MASIA 900G (MONTO SUGERIDO)", "q": 1, "p": 20.52}, {"n": "CAFE AMANECER 200GR (UND)", "q": 9, "p": 2.19}, {"n": "AVENA GRANEL (1/2 KILO)", "q": 28, "p": 0.7}, {"n": "GALLETA DE SODA CARABOBO (PAQUETE)", "q": 15, "p": 1.29}, {"n": "VICERROY (CAJA)", "q": 11, "p": 1.73}, {"n": "ACEITE OLIVA 500ML (500gr)", "q": 4, "p": 4.74}, {"n": "PEPITO RIKOS (UND)", "q": 41, "p": 0.45}, {"n": "PAPEL ALISOF 600H (PAQUETE)", "q": 10, "p": 1.83}, {"n": "SARDINA INCOSA TOMATE (LATA)", "q": 31, "p": 0.58}, {"n": "PAÑAL BABY FINGER G. (PAQUETE)", "q": 5, "p": 3.44}, {"n": "LECHE EN POLVO CAMPIÑA 200GR (UND)", "q": 5, "p": 3.36}, {"n": "SARDINA INCOSA ACEITE (LATA)", "q": 28, "p": 0.58}, {"n": "PASTA CARACOL KGR (MONTO SUGERIDO)", "q": 1, "p": 16.18}, {"n": "COMPOTA OSOLE 100GR (UND)", "q": 35, "p": 0.45}, {"n": "GALLETA MARIA ITALIA (PAQUETE)", "q": 28, "p": 0.56}, {"n": "MORTADELA CARACAS 500G 1X10", "q": 1, "p": 15.3}, {"n": "CHICHARRON (UND)", "q": 17, "p": 0.9}, {"n": "SUN COLA 400ML (UND)", "q": 51, "p": 0.3}, {"n": "MORTADELA DON RAMON 600G (UND)", "q": 11, "p": 1.38}, {"n": "HARINA DE MAIZ DOÑA EMILIA 900G 1X20", "q": 1, "p": 14.75}, {"n": "CARAOTAS MAIZAL 400G (UND)", "q": 16, "p": 0.9}, {"n": "GALLETAS INDEPENDENCIA (UND)", "q": 31, "p": 0.46}, {"n": "GALLETA DE SODA (PAQUETE)", "q": 9, "p": 1.5}, {"n": "POLVOROSA (PAQUETE)", "q": 11, "p": 1.2}, {"n": "LUCKY STRIKE NOVA (CAJA)", "q": 4, "p": 3.04}, {"n": "MUSLOS (KG)", "q": 4, "p": 3.0}, {"n": "VASO MAYONESA 500GR (UND)", "q": 8, "p": 1.42}, {"n": "GALLETA PAMPA MARIA 150G (UND)", "q": 23, "p": 0.48}, {"n": "SUN COLA LITRO (LTS)", "q": 20, "p": 0.55}, {"n": "MARMOLEADA (PAQUETE)", "q": 9, "p": 1.2}, {"n": "PAPEL LUCIANO 215H (MONTO SUGERIDO)", "q": 1, "p": 10.75}, {"n": "GALLETA TAM CORAZON 1X24 UND", "q": 1, "p": 10.6}]};
+function renderSug(){const b=$('sug');if(!b)return;
+  if(state.sugVisto===SUGERIDO.id){b.hidden=true;return}
+  b.hidden=false;b.innerHTML='';const t=document.createElement('div');t.className='t';
+  t.innerHTML='<b>Pedido sugerido para '+SUGERIDO.dias+' días</b><br>'+SUGERIDO.items.length+' productos · '+fmt(SUGERIDO.total)+' · armado el '+SUGERIDO.fecha;
+  const go=document.createElement('button');go.className='go';go.type='button';go.textContent='Cargar';go.onclick=cargarSug;
+  const no=document.createElement('button');no.className='no';no.type='button';no.textContent='✕';no.setAttribute('aria-label','Ocultar');no.onclick=()=>{state.sugVisto=SUGERIDO.id;save();renderSug()};
+  b.append(t,go,no)}
+async function cargarSug(){
+  const hay=Object.keys(state.qty).length;
+  if(!await ask('¿Cargar el pedido sugerido?\n'+SUGERIDO.items.length+' productos por '+fmt(SUGERIDO.total)+'.'+(hay?'\nTu lista actual se vacía y se reemplaza por el pedido sugerido.':'')+'\nDespués revisa y ajusta las cantidades con lo que tengas en el depósito.'))return;
+  state.qty={};state.marks={};state.curHist=null;
+  SUGERIDO.items.forEach((x,i)=>{let p=state.products.find(y=>y.name===x.n);
+    if(!p){p={id:'sg'+Date.now().toString(36)+i,name:x.n,price:x.p,kg:KG[x.n]||0,area:guessArea(x.n)};state.products.push(p)}
+    else if(!(p.price>0))p.price=x.p;
+    state.qty[p.id]=String(x.q)});
+  state.sugVisto=SUGERIDO.id;save();filter='on';areaF=null;document.querySelectorAll('.chip[data-f]').forEach(c=>c.classList.toggle('act',c.dataset.f==='on'));
+  $('q').value='';render();renderSug();window.scrollTo({top:0});toast('Pedido sugerido cargado');
+}
 function areaStats(){
   const m={};state.dests.forEach(d=>m[d]={n:0,kg:0,t:0,pend:0,nokg:0});
   for(const p of state.products){const q=num(state.qty[p.id]);if(!(q>0)||state.marks[p.id]==='no')continue;
@@ -965,7 +991,7 @@ $('fWa').onclick=()=>{const vis=fVis().map(([i])=>i);if(!vis.length){toast('La l
   openWA('',t)};
 $('fClear').onclick=async()=>{if(!state.falt.length)return;if(!await ask('¿Vaciar toda la lista de faltantes?'))return;state.falt=[];save();renderF()};
 updFaltCnt();
-save();drawLogo();render();
+save();drawLogo();render();renderSug();
 </script>
 </body>
 </html>
