@@ -458,6 +458,8 @@ const PRICE2 = {"REFRESCO BIG COLA 2L 1X6 UND":4.90,"SAL LAS MARIAS 1X25 KG":6.6
  "PAPEL ALISOF 215H 4X12":6.60,"PAPEL HIGIENICO ALISOF 400 HOJAS 4X12":15.26,"PAPEL HIGIENICO ALISOF 600 HOJAS 4X12":21.74,
  "PASTA LA ESPECIAL VERMICELLI 1KG 1X12":14.66};
 BASE.forEach(p=>{if(PRICE2[p[0]]!==undefined)p[1]=PRICE2[p[0]]});
+// Productos repetidos que se quitaron (se queda el otro nombre)
+const REMOVED = ["DETERGENTE ULTREX 500GRS 1X40"]; // repetido de DETERGENTE ULTREX MANZANA 600GRS 1X40
 
 // Kilos por bulto (harinas, pastas, azúcar, sal)
 const KG = {
@@ -480,7 +482,7 @@ const KEY='goa_compras_v1', VER=6;
 const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 
 const mk=(p,i)=>({id:'p'+i, name:p[0], price:FIX[p[0]]??p[1], kg:KG[p[0]]||0});
-let state = store.get(KEY) || {products:BASE.map(mk), qty:{}, prov:'', tel:'', logo:null, deleted:[], v:VER};
+let state = store.get(KEY) || {products:BASE.map(mk).filter(p=>!REMOVED.includes(p.name)), qty:{}, prov:'', tel:'', logo:null, deleted:[], v:VER};
 state.deleted=state.deleted||[];state.marks=state.marks||{};state.falt=state.falt||[];state.hist=state.hist||[];
 state.dests=state.dests||['Granos','Víveres','Charcutería','Refrescos','Limpieza','Otro'];
 const AREA_RULES=[
@@ -493,7 +495,8 @@ state.products.forEach(p=>{if(!p.area)p.area=guessArea(p.name)});
 state.products.forEach(p=>{if(!state.dests.includes(p.area))state.dests.push(p.area)});
 let areaF=null;
 const nkey=s=>String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
-BASE.forEach((p,i)=>{const id='p'+i;if(!state.products.some(x=>x.id===id||nkey(x.name)===nkey(p[0]))&&!state.deleted.includes(id))state.products.push(mk(p,i))});
+BASE.forEach((p,i)=>{const id='p'+i;if(!REMOVED.includes(p[0])&&!state.products.some(x=>x.id===id||nkey(x.name)===nkey(p[0]))&&!state.deleted.includes(id))state.products.push(mk(p,i))});
+{const rk=REMOVED.map(nkey);state.products=state.products.filter(p=>{if(rk.includes(nkey(p.name))){delete state.qty[p.id];if(!state.deleted.includes(p.id))state.deleted.push(p.id);return false}return true})}
 if((state.v||1)<4)state.logo=null;
 if((state.v||1)<VER){
   const v0=state.v||1;
