@@ -11,6 +11,7 @@
         input[type=number] { -moz-appearance: textfield; }
         .purchased-row { background-color: rgba(240, 253, 244, 0.75) !important; }
         .nohay-row { background-color: rgba(254, 242, 242, 0.85) !important; }
+        .mf-ed { display:inline-block; margin-left:6px; background:#eef2ff; color:#3730a3; border:0; border-radius:7px; padding:3px 8px; font-size:11px; font-weight:800; cursor:pointer; vertical-align:middle; }
         .mk2 { display:flex; gap:6px; margin-top:6px; }
         .mk2 button { flex:1; max-width:90px; min-width:52px; white-space:nowrap; border:1.5px solid #d1d5db; background:#fff; color:#6b7280; border-radius:9px; padding:5px 0; font-size:12px; font-weight:800; cursor:pointer; }
         .mk2 button.si.on { background:#16a34a; border-color:#16a34a; color:#fff; }
@@ -2266,7 +2267,7 @@
     <div id="productModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-3 hidden">
         <div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-5 relative">
             <h3 class="text-lg font-bold text-gray-800 mb-3 flex items-center gap-2">
-                <i class="fa-solid fa-cart-plus text-indigo-600"></i> Agregar Producto
+                <i class="fa-solid fa-cart-plus text-indigo-600"></i> <span id="pmTitle">Agregar Producto</span>
             </h3>
             
             <form id="newProductForm" onsubmit="handleAddProduct(event)" class="space-y-3">
@@ -2302,7 +2303,7 @@
 
                 <div class="flex justify-end gap-2 pt-3">
                     <button type="button" onclick="closeModal()" class="px-3 py-1.5 border border-gray-300 text-gray-600 rounded-lg text-xs hover:bg-gray-100 font-medium">Cancelar</button>
-                    <button type="submit" class="px-4 py-1.5 bg-indigo-600 text-white rounded-lg text-xs hover:bg-indigo-700 font-bold shadow">Guardar Producto</button>
+                    <button type="submit" class="px-4 py-1.5 bg-indigo-600 text-white rounded-lg text-xs hover:bg-indigo-700 font-bold shadow" id="pmSave">Guardar Producto</button>
                 </div>
             </form>
         </div>
@@ -2766,7 +2767,7 @@
                 ` : '';
 
                 tr.innerHTML = `
-                    <td class="py-2.5 px-3 font-semibold text-gray-800"><button type="button" class="inv-del" onclick="deleteProduct(${p.id})" title="Eliminar este producto (duplicado)">×</button>${p.name}<div class="mk2" id="mk-${p.id}" ${p.selectedQty > 0 ? '' : 'hidden'}><button type="button" class="si ${p.mark === 'ok' ? 'on' : ''}" onclick="setMark(${p.id}, 'ok')">✓ Sí</button><button type="button" class="no ${p.mark === 'no' ? 'on' : ''}" onclick="setMark(${p.id}, 'no')">✗ No</button></div></td>
+                    <td class="py-2.5 px-3 font-semibold text-gray-800"><button type="button" class="inv-del" onclick="deleteProduct(${p.id})" title="Eliminar este producto (duplicado)">×</button>${p.name}<button type="button" class="mf-ed" onclick="editProduct(${p.id})">✎ Editar</button><div class="mk2" id="mk-${p.id}" ${p.selectedQty > 0 ? '' : 'hidden'}><button type="button" class="si ${p.mark === 'ok' ? 'on' : ''}" onclick="setMark(${p.id}, 'ok')">✓ Sí</button><button type="button" class="no ${p.mark === 'no' ? 'on' : ''}" onclick="setMark(${p.id}, 'no')">✗ No</button></div></td>
                     ${aisleColHtml}
                     <td class="py-2.5 px-2 text-right price-col ${priceColClass} border-l border-gray-100">
                         <input type="number" step="0.01" min="0" id="pbs-${p.id}" value="${p.priceBs.toFixed(2)}" oninput="updateProductPrice(${p.id}, 'bs', this.value)" onchange="refreshPriceInputs(${p.id})" class="w-full min-w-[5.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
@@ -3495,7 +3496,27 @@
             updateMfBar();
         }
 
+        let editingId = null;
+        // Editar un producto: abre la misma ventana de "Agregar" con sus datos
+        function editProduct(id) {
+            const p = products.find(x => x.id === id);
+            if (!p) return;
+            editingId = id;
+            document.getElementById('pmTitle').innerText = 'Editar Producto';
+            document.getElementById('pmSave').innerText = 'Guardar Cambios';
+            document.getElementById('newProdName').value = p.name;
+            document.getElementById('newProdCategory').value = p.category;
+            document.getElementById('newProdAisle').value = p.aisle || '';
+            document.getElementById('newProdPriceUsd').value = p.priceUsd ? p.priceUsd.toFixed(2) : '';
+            document.getElementById('newProdPriceBs').value = p.priceBs ? p.priceBs.toFixed(2) : '';
+            toggleModalAisleInput();
+            document.getElementById('productModal').classList.remove('hidden');
+        }
+
         function openModal() {
+            editingId = null;
+            document.getElementById('pmTitle').innerText = 'Agregar Producto';
+            document.getElementById('pmSave').innerText = 'Guardar Producto';
             document.getElementById('productModal').classList.remove('hidden');
             document.getElementById('newProdCategory').value = ['granos', 'charcuteria'].includes(currentTab) ? currentTab : 'catalog';
             toggleModalAisleInput();
@@ -3504,6 +3525,7 @@
         function closeModal() {
             document.getElementById('productModal').classList.add('hidden');
             document.getElementById('newProductForm').reset();
+            editingId = null;
         }
 
         function toggleModalAisleInput() {
@@ -3535,6 +3557,21 @@
             
             const priceUsd = parseFloat(document.getElementById('newProdPriceUsd').value) || 0;
             const priceBs = parseFloat(document.getElementById('newProdPriceBs').value) || (priceUsd * getCurrentRate());
+
+            if (editingId !== null) {
+                const p = products.find(x => x.id === editingId);
+                if (p) {
+                    p.name = name;
+                    p.category = category;
+                    p.aisle = category === 'catalog' ? (document.getElementById('newProdAisle').value.trim() || p.aisle || 'Pasillo 1') : '';
+                    p.priceBs = priceBs;
+                    p.priceUsd = priceUsd || (priceBs / getCurrentRate());
+                    saveProductsLocally();
+                }
+                closeModal();
+                renderCurrentTab();
+                return;
+            }
 
             const newProd = {
                 id: Date.now(),
