@@ -50,6 +50,11 @@ header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;pa
 .tot small{opacity:.85;font-size:13px;line-height:1.35}
 .tot small em{font-style:normal;color:#ffb36b}
 .tot b{font-size:26px;color:var(--gold2);white-space:nowrap}
+.vac{background:rgba(255,255,255,.1);color:#ffb0b0;border:1px solid rgba(255,155,155,.55);border-radius:10px;padding:5px 10px;font:inherit;font-size:12px;font-weight:700;line-height:1.2;cursor:pointer;flex:none}
+.item.cur{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.28)}
+.item.cur .qty{border-color:#2563eb}
+.osum .cf{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.18);padding-top:8px;margin-top:2px}
+.osum .cf b{font-size:24px;color:#6ee7a0}
 .bar .row .btn{flex:1}
 .btn-wa{background:var(--wa);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px}
 .btn-sm{background:#2a456e;color:#fff;flex:0 0 auto!important;padding:12px 12px}
@@ -255,7 +260,7 @@ header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;pa
 <div class="list" id="list"></div>
 
 <div class="bar">
-  <div class="tot"><small id="count">0 productos</small><b id="total">$0.00</b></div>
+  <div class="tot"><small id="count">0 productos</small><button class="vac" id="vacBtn" hidden>🗑 Vaciar<br>pedido</button><b id="total">$0.00</b></div>
   <div class="row">
     <button class="btn btn-sm ico" id="ordBtn">📋<span>Pedido</span></button>
     <button class="btn btn-sm ico" id="kgBtn">⚖<span>Carga</span></button>
@@ -311,7 +316,7 @@ header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;pa
 <div class="panel" id="opanel">
   <header><h2>📋 Revisar pedido</h2><button class="close" data-close="opanel">✕ Cerrar</button></header>
   <div class="wbox">
-    <div class="osum"><div><b id="oN">0</b><small>Productos</small></div><div><b class="g" id="oOk">0</b><small>Hay</small></div><div><b class="r" id="oNo">0</b><small>Faltan</small></div><div><b class="k" id="oKg">0 kg</b><small>Peso</small></div><div><b class="y" id="oT">$0</b><small>Total</small></div></div>
+    <div class="osum"><div><b id="oN">0</b><small>Productos</small></div><div><b class="g" id="oOk">0</b><small>Hay</small></div><div><b class="r" id="oNo">0</b><small>Faltan</small></div><div><b class="k" id="oKg">0 kg</b><small>Peso</small></div><div><b class="y" id="oT">$0</b><small>Total</small></div><div class="cf"><b id="oCf">$0.00</b><small id="oCfN">Confirmado (✓ Hay): 0 de 0</small></div></div>
     <div class="wnote" style="margin:0 0 10px">Toca <b>✓ Hay</b> o <b>✗ Falta</b> en cada producto a medida que te confirman. Toca <b>✎</b> si quieres cambiar el precio o la cantidad. Lo que marques como falta pasa a la lista de <b>Faltantes</b>.</div>
     <div class="addo">
       <div class="at">➕ Agregar un producto al pedido</div>
@@ -331,7 +336,7 @@ header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;pa
     </div>
     <div class="wnote">El archivo que envías es un html con tu logo donde el proveedor solo puede marcar <b>✓ Hay / ✗ No hay</b>, guardarlo y responderte por WhatsApp. Al confirmar la compra, el pedido pasa al <b>Historial</b> y la lista queda limpia para el próximo.</div>
   </div>
-  <div class="ofoot"><small id="oFc">0 productos</small><div style="text-align:right"><small>Va sumando tu compra</small><b id="oFt">$0.00</b></div></div>
+  <div class="ofoot"><small id="oFc">0 productos</small><div style="text-align:right"><small>✓ Confirmado</small><b id="oFt">$0.00</b></div></div>
 </div>
 <datalist id="prodList"></datalist>
 
@@ -603,6 +608,7 @@ function totals(){
   let t=0,c=0,pend=0,kg=0;
   for(const p of state.products){const q=num(state.qty[p.id]);if(q>0){c++;t+=q*p.price;kg+=q*(p.kg||0);if(!(p.price>0))pend++}}
   $('total').textContent=fmt(t);
+  $('vacBtn').hidden=!(c>0);
   renderAbar();
   $('cAll').textContent=state.products.length; $('cOn').textContent=c||'';
   $('cNop').textContent=state.products.filter(p=>!(p.price>0)).length||''; $('cKg').textContent=state.products.filter(p=>p.kg>0).length||'';
@@ -626,10 +632,19 @@ $('list').addEventListener('keydown',e=>{
   if(!e.target.classList.contains('qty')||!['Enter','ArrowDown','ArrowUp'].includes(e.key))return;
   e.preventDefault();
   const all=[...document.querySelectorAll('#list .qty')], next=all[all.indexOf(e.target)+(e.key==='ArrowUp'?-1:1)];
-  if(next){next.focus();next.select();next.scrollIntoView({block:'center',behavior:'smooth'})}
+  if(next){next.focus({preventScroll:true});next.select();ponArriba(next)}
   else e.target.blur();
 });
 $('list').addEventListener('click',e=>{const id=e.target.dataset.edit;if(id)openPanel(id)});
+// Coloca la línea que estás llenando justo debajo del buscador (no se pierde aunque salga el teclado)
+function ponArriba(inp){
+  const card=inp.closest('.item');if(!card)return;
+  const hs=[...document.querySelectorAll('.top,.abar')].filter(x=>x.offsetParent).map(x=>x.offsetHeight);
+  const go=()=>window.scrollBy({top:card.getBoundingClientRect().top-(Math.max(0,...hs)+8),behavior:'instant'});
+  go();setTimeout(go,120);
+}
+$('list').addEventListener('focusin',e=>{if(!e.target.classList.contains('qty'))return;document.querySelectorAll('#list .item.cur').forEach(x=>x.classList.remove('cur'));e.target.closest('.item').classList.add('cur')});
+$('list').addEventListener('focusout',e=>{const c=e.target.closest&&e.target.closest('.item');if(c)c.classList.remove('cur')});
 
 $('q').addEventListener('input',render);
 $('qx').onclick=()=>{$('q').value='';render();$('q').focus()};
@@ -702,6 +717,11 @@ $('wList').addEventListener('click',e=>{const id=e.target.dataset.wedit;if(id)op
 $('kgBtn').onclick=()=>{renderW();openP('wpanel')};
 $('wClose').onclick=()=>closeP('wpanel');
 
+$('vacBtn').onclick=async()=>{
+  if(!Object.keys(state.qty).length)return;
+  if(!await ask('¿Vaciar el pedido? Todas las cantidades quedan en blanco.'))return;
+  state.qty={};state.marks={};state.curHist=null;save();render();window.scrollTo({top:0});toast('Pedido vaciado');
+};
 $('clearBtn').onclick=async()=>{
   if(!Object.keys(state.qty).length)return;
   if(!await ask('¿Vaciar la lista? Se borran las cantidades y las marcas.'))return;
@@ -746,7 +766,7 @@ const today=()=>new Date().toLocaleDateString('es-VE');
 const waTel=t=>{t=(t||'').replace(/\D/g,'');if(t.startsWith('0'))t='58'+t.slice(1);return t.length>=10?t:''};
 const openWA=(tel,txt)=>{window.location.href='https://wa.me/'+waTel(tel)+'?text='+encodeURIComponent(txt)};
 function curItems(){return sorted().filter(p=>num(state.qty[p.id])>0).map(p=>({id:p.id,name:p.name,qty:num(state.qty[p.id]),price:p.price||0,kg:p.kg||0,mark:state.marks[p.id]||''}))}
-function sums(items){let t=0,c=0,ok=0,no=0,kg=0;items.forEach(i=>{t+=i.qty*i.price;if(i.mark==='ok')ok++;if(i.mark==='no')no++;else{c+=i.qty*i.price;kg+=i.qty*(i.kg||0)}});return {t,c,ok,no,kg}}
+function sums(items){let t=0,c=0,ok=0,no=0,kg=0,cf=0;items.forEach(i=>{t+=i.qty*i.price;if(i.mark==='ok'){ok++;cf+=i.qty*i.price}if(i.mark==='no')no++;else{c+=i.qty*i.price;kg+=i.qty*(i.kg||0)}});return {t,c,ok,no,kg,cf}}
 function faltText(items,prov,fecha){
   const f=items.filter(i=>i.mark==='no');
   let t='*GOA Business — Productos faltantes*\n'+(prov?'Proveedor: '+prov+'\n':'')+'Pedido del: '+fecha+'\n\n';
@@ -757,10 +777,11 @@ function renderO(){
   const items=curItems(), s=sums(items);
   $('oN').textContent=items.length;$('oOk').textContent=s.ok;$('oNo').textContent=s.no;$('oT').textContent=fmt(s.c);$('oKg').textContent=fkg(s.kg);
   const pend=items.filter(i=>i.mark!=='no'&&!(i.price>0)).length, nb=items.filter(i=>i.mark!=='no').length;
-  $('oFt').textContent=fmt(s.c);
+  $('oFt').textContent=fmt(s.cf);
+  $('oCf').textContent=fmt(s.cf);$('oCfN').textContent='Confirmado (✓ Hay): '+s.ok+' de '+items.length;
   {const {rows,tot}=areaStats();rows.sort((x,y)=>y[1].t-x[1].t);
    $('oAreas').innerHTML=rows.length>0?`<div class="oar"><span class="hd">Área</span><span class="hd r">Peso</span><span class="hd r">Monto</span>${rows.map(([d,a])=>`<a data-oa="${esc(d)}">${esc(d)} ›</a><span class="r">${fkg(a.kg)}</span><span class="r">${fmt(a.t)}</span>`).join('')}<span class="tt">Total</span><span class="r tt">${fkg(tot.kg)}</span><span class="r tt">${fmt(tot.t)}</span></div>`:'';}
-  $('oFc').innerHTML=nb+(nb===1?' producto':' productos')+(s.no?`<br>${s.no} falta${s.no===1?'':'n'} (no suman)`:'')+(pend?`<br><em>${pend} sin precio</em>`:'');
+  $('oFc').innerHTML=s.ok+' de '+items.length+' confirmados<br>Pedido: '+fmt(s.c)+(s.no?`<br>${s.no} falta${s.no===1?'':'n'} (no suman)`:'')+(pend?`<br><em>${pend} sin precio</em>`:'');
   $('oList').innerHTML=items.length?items.map(i=>`<div class="ck ${i.mark}"><div class="n">${esc(i.name)}</div>
     ${oEdit===i.id?`<div class="pe"><label>Cantidad<input id="peQ" inputmode="decimal" value="${i.qty}" autocomplete="off" enterkeyhint="next"></label><label>Precio $<input id="peP" inputmode="decimal" value="${i.price>0?i.price:''}" placeholder="0.00" autocomplete="off" enterkeyhint="done"></label><button class="btn b-ok2" data-pes="${i.id}">✓</button></div>`
     :`<div class="d">Cantidad: <b>${i.qty}</b>${i.price>0?` · ${fmt(i.price)} = <b>${fmt(i.qty*i.price)}</b>`:' · <span class="nop">Sin precio</span>'}<button class="edit pen" data-pen="${i.id}" aria-label="Editar precio">✎</button></div>`}
