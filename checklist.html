@@ -26,6 +26,13 @@
         .mf-bar .r2 .si b { display:block; font-size:18px; color:#4ade80; }
         .mf-bar .r2 .no { background:rgba(220,38,38,.2); color:#fca5a5; }
         .mf-bar .r2 .pe { background:rgba(255,255,255,.08); color:#cbd5e1; }
+        body.kb .mf-bar { padding:5px 12px; }
+        body.kb .mf-bar .r2, body.kb .mf-bar .r1 b span { display:none; }
+        body.kb .mf-bar .r1 { align-items:center; }
+        body.kb .mf-bar .r1 small { font-size:12px; }
+        body.kb .mf-bar .r1 small .mf2 { display:none; }
+        body.kb .mf-bar .r1 b { font-size:18px; }
+        tr.mf-cur { outline:3px solid #2563eb; outline-offset:-3px; }
         .purchased-text { text-decoration: line-through; color: #166534 !important; opacity: 0.75; }
         .tab-active { border-bottom: 3px solid #f59e0b; color: #ffffff !important; font-weight: bold; }
     </style>
@@ -59,7 +66,7 @@
 <nav class="goa-sw"><a href="./">🛒 Mercabar</a><a href="checklist.html" class="on">✅ Mundo Famoso</a><a href="variado.html">🧺 Variado</a></nav>
 
     <!-- HEADER Y NAVEGACIÓN PRINCIPAL -->
-    <header class="bg-indigo-700 text-white shadow-lg sticky top-0 z-30">
+    <header class="bg-indigo-700 text-white shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
             <div class="text-center sm:text-left">
                 <h1 class="text-xl sm:text-2xl font-bold flex items-center justify-center sm:justify-start gap-2">
@@ -93,8 +100,9 @@
             </div>
         </div>
 
+    </header>
         <!-- NAVEGACIÓN POR PESTAÑAS -->
-        <div class="bg-indigo-900 text-indigo-200 shadow-inner">
+        <div id="mfTabs" class="bg-indigo-900 text-indigo-200 shadow-inner sticky top-0 z-30">
             <div class="max-w-7xl mx-auto px-2 sm:px-4 flex gap-2 sm:gap-4 text-xs sm:text-sm overflow-x-auto whitespace-nowrap py-1">
                 <button id="tab-catalog" onclick="switchTab('catalog')" class="py-2.5 px-3 font-semibold hover:text-white transition-colors flex items-center gap-2">
                     <i class="fa-solid fa-boxes-stacked"></i> 1. Catálogo Completo
@@ -116,7 +124,7 @@
                 </button>
             </div>
         </div>
-    </header>
+    
 <div id="sugSol" style="display:none;margin:10px auto 0;max-width:80rem;padding:0 12px"><div style="background:#312e81;color:#fff;border-radius:14px;padding:12px;display:flex;gap:10px;align-items:center;font-family:system-ui,Arial,sans-serif">
 <div style="flex:1;min-width:0;font-size:13.5px;line-height:1.35"><b style="color:#fcd34d;font-size:15px">Pedido sugerido Mundo Famoso · 8 días</b><br><span id="sugSolTxt"></span></div>
 <button type="button" id="sugSolGo" style="border:0;border-radius:10px;padding:10px 12px;font-weight:700;background:#f59e0b;color:#1e1b4b;cursor:pointer">Cargar</button>
@@ -189,7 +197,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-1" value="0.37" oninput="updateProductPrice(1, 'usd', this.value)" onchange="refreshPriceInputs(1)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(1, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(1, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-1">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-2">
@@ -206,7 +214,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-2" value="16.48" oninput="updateProductPrice(2, 'usd', this.value)" onchange="refreshPriceInputs(2)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(2, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(2, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-2">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-3">
@@ -223,7 +231,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-3" value="0.83" oninput="updateProductPrice(3, 'usd', this.value)" onchange="refreshPriceInputs(3)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(3, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(3, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-3">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-4">
@@ -240,7 +248,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-4" value="0.38" oninput="updateProductPrice(4, 'usd', this.value)" onchange="refreshPriceInputs(4)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(4, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(4, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-4">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-5">
@@ -257,7 +265,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-5" value="0.35" oninput="updateProductPrice(5, 'usd', this.value)" onchange="refreshPriceInputs(5)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(5, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(5, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-5">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-6">
@@ -274,7 +282,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-6" value="19.88" oninput="updateProductPrice(6, 'usd', this.value)" onchange="refreshPriceInputs(6)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(6, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(6, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-6">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-7">
@@ -291,7 +299,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-7" value="2.31" oninput="updateProductPrice(7, 'usd', this.value)" onchange="refreshPriceInputs(7)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(7, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(7, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-7">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-8">
@@ -308,7 +316,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-8" value="4.37" oninput="updateProductPrice(8, 'usd', this.value)" onchange="refreshPriceInputs(8)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(8, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(8, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-8">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-9">
@@ -325,7 +333,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-9" value="1.60" oninput="updateProductPrice(9, 'usd', this.value)" onchange="refreshPriceInputs(9)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(9, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(9, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-9">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-10">
@@ -342,7 +350,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-10" value="4.45" oninput="updateProductPrice(10, 'usd', this.value)" onchange="refreshPriceInputs(10)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(10, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(10, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-10">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-11">
@@ -359,7 +367,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-11" value="1.32" oninput="updateProductPrice(11, 'usd', this.value)" onchange="refreshPriceInputs(11)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(11, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(11, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-11">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-12">
@@ -376,7 +384,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-12" value="3.09" oninput="updateProductPrice(12, 'usd', this.value)" onchange="refreshPriceInputs(12)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(12, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(12, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-12">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-13">
@@ -393,7 +401,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-13" value="0.43" oninput="updateProductPrice(13, 'usd', this.value)" onchange="refreshPriceInputs(13)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(13, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(13, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-13">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-14">
@@ -410,7 +418,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-14" value="0.32" oninput="updateProductPrice(14, 'usd', this.value)" onchange="refreshPriceInputs(14)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(14, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(14, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-14">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-15">
@@ -427,7 +435,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-15" value="0.49" oninput="updateProductPrice(15, 'usd', this.value)" onchange="refreshPriceInputs(15)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(15, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(15, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-15">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-16">
@@ -444,7 +452,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-16" value="1.22" oninput="updateProductPrice(16, 'usd', this.value)" onchange="refreshPriceInputs(16)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(16, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(16, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-16">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-17">
@@ -461,7 +469,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-17" value="2.43" oninput="updateProductPrice(17, 'usd', this.value)" onchange="refreshPriceInputs(17)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(17, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(17, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-17">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-18">
@@ -478,7 +486,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-18" value="1.59" oninput="updateProductPrice(18, 'usd', this.value)" onchange="refreshPriceInputs(18)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(18, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(18, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-18">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-19">
@@ -495,7 +503,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-19" value="2.25" oninput="updateProductPrice(19, 'usd', this.value)" onchange="refreshPriceInputs(19)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(19, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(19, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-19">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-20">
@@ -512,7 +520,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-20" value="1.60" oninput="updateProductPrice(20, 'usd', this.value)" onchange="refreshPriceInputs(20)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(20, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(20, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-20">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-21">
@@ -529,7 +537,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-21" value="1.84" oninput="updateProductPrice(21, 'usd', this.value)" onchange="refreshPriceInputs(21)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(21, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(21, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-21">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-22">
@@ -546,7 +554,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-22" value="1.08" oninput="updateProductPrice(22, 'usd', this.value)" onchange="refreshPriceInputs(22)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(22, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(22, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-22">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-23">
@@ -563,7 +571,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-23" value="3.91" oninput="updateProductPrice(23, 'usd', this.value)" onchange="refreshPriceInputs(23)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(23, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(23, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-23">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-24">
@@ -580,7 +588,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-24" value="0.14" oninput="updateProductPrice(24, 'usd', this.value)" onchange="refreshPriceInputs(24)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(24, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(24, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-24">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-25">
@@ -597,7 +605,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-25" value="0.68" oninput="updateProductPrice(25, 'usd', this.value)" onchange="refreshPriceInputs(25)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(25, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(25, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-25">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-26">
@@ -614,7 +622,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-26" value="1.36" oninput="updateProductPrice(26, 'usd', this.value)" onchange="refreshPriceInputs(26)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(26, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(26, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-26">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-27">
@@ -631,7 +639,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-27" value="1.86" oninput="updateProductPrice(27, 'usd', this.value)" onchange="refreshPriceInputs(27)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(27, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(27, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-27">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-28">
@@ -648,7 +656,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-28" value="5.00" oninput="updateProductPrice(28, 'usd', this.value)" onchange="refreshPriceInputs(28)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(28, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(28, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-28">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-29">
@@ -665,7 +673,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-29" value="0.76" oninput="updateProductPrice(29, 'usd', this.value)" onchange="refreshPriceInputs(29)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(29, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(29, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-29">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-30">
@@ -682,7 +690,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-30" value="0.93" oninput="updateProductPrice(30, 'usd', this.value)" onchange="refreshPriceInputs(30)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(30, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(30, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-30">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-31">
@@ -699,7 +707,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-31" value="0.29" oninput="updateProductPrice(31, 'usd', this.value)" onchange="refreshPriceInputs(31)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(31, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(31, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-31">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-32">
@@ -716,7 +724,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-32" value="3.18" oninput="updateProductPrice(32, 'usd', this.value)" onchange="refreshPriceInputs(32)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(32, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(32, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-32">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-33">
@@ -733,7 +741,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-33" value="3.52" oninput="updateProductPrice(33, 'usd', this.value)" onchange="refreshPriceInputs(33)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(33, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(33, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-33">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-34">
@@ -750,7 +758,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-34" value="0.98" oninput="updateProductPrice(34, 'usd', this.value)" onchange="refreshPriceInputs(34)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(34, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(34, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-34">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-35">
@@ -767,7 +775,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-35" value="0.73" oninput="updateProductPrice(35, 'usd', this.value)" onchange="refreshPriceInputs(35)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(35, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(35, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-35">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-36">
@@ -784,7 +792,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-36" value="3.72" oninput="updateProductPrice(36, 'usd', this.value)" onchange="refreshPriceInputs(36)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(36, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(36, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-36">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-37">
@@ -801,7 +809,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-37" value="0.15" oninput="updateProductPrice(37, 'usd', this.value)" onchange="refreshPriceInputs(37)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(37, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(37, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-37">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-38">
@@ -818,7 +826,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-38" value="0.81" oninput="updateProductPrice(38, 'usd', this.value)" onchange="refreshPriceInputs(38)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(38, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(38, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-38">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-39">
@@ -835,7 +843,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-39" value="1.19" oninput="updateProductPrice(39, 'usd', this.value)" onchange="refreshPriceInputs(39)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(39, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(39, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-39">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-40">
@@ -852,7 +860,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-40" value="4.89" oninput="updateProductPrice(40, 'usd', this.value)" onchange="refreshPriceInputs(40)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(40, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(40, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-40">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-41">
@@ -869,7 +877,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-41" value="1.84" oninput="updateProductPrice(41, 'usd', this.value)" onchange="refreshPriceInputs(41)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(41, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(41, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-41">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-42">
@@ -886,7 +894,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-42" value="2.20" oninput="updateProductPrice(42, 'usd', this.value)" onchange="refreshPriceInputs(42)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(42, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(42, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-42">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-43">
@@ -903,7 +911,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-43" value="5.00" oninput="updateProductPrice(43, 'usd', this.value)" onchange="refreshPriceInputs(43)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(43, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(43, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-43">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-44">
@@ -920,7 +928,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-44" value="3.90" oninput="updateProductPrice(44, 'usd', this.value)" onchange="refreshPriceInputs(44)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(44, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(44, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-44">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-45">
@@ -937,7 +945,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-45" value="4.52" oninput="updateProductPrice(45, 'usd', this.value)" onchange="refreshPriceInputs(45)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(45, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(45, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-45">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-46">
@@ -954,7 +962,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-46" value="1.75" oninput="updateProductPrice(46, 'usd', this.value)" onchange="refreshPriceInputs(46)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(46, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(46, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-46">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-47">
@@ -971,7 +979,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-47" value="4.33" oninput="updateProductPrice(47, 'usd', this.value)" onchange="refreshPriceInputs(47)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(47, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(47, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-47">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-48">
@@ -988,7 +996,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-48" value="4.58" oninput="updateProductPrice(48, 'usd', this.value)" onchange="refreshPriceInputs(48)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(48, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(48, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-48">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-49">
@@ -1005,7 +1013,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-49" value="0.27" oninput="updateProductPrice(49, 'usd', this.value)" onchange="refreshPriceInputs(49)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(49, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(49, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-49">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-50">
@@ -1022,7 +1030,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-50" value="0.54" oninput="updateProductPrice(50, 'usd', this.value)" onchange="refreshPriceInputs(50)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(50, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(50, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-50">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-51">
@@ -1039,7 +1047,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-51" value="0.67" oninput="updateProductPrice(51, 'usd', this.value)" onchange="refreshPriceInputs(51)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(51, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(51, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-51">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-52">
@@ -1056,7 +1064,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-52" value="0.54" oninput="updateProductPrice(52, 'usd', this.value)" onchange="refreshPriceInputs(52)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(52, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(52, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-52">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-53">
@@ -1073,7 +1081,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-53" value="0.42" oninput="updateProductPrice(53, 'usd', this.value)" onchange="refreshPriceInputs(53)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(53, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(53, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-53">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-54">
@@ -1090,7 +1098,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-54" value="0.72" oninput="updateProductPrice(54, 'usd', this.value)" onchange="refreshPriceInputs(54)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(54, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(54, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-54">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-55">
@@ -1107,7 +1115,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-55" value="0.54" oninput="updateProductPrice(55, 'usd', this.value)" onchange="refreshPriceInputs(55)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(55, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(55, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-55">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-56">
@@ -1124,7 +1132,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-56" value="0.58" oninput="updateProductPrice(56, 'usd', this.value)" onchange="refreshPriceInputs(56)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(56, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(56, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-56">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-57">
@@ -1141,7 +1149,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-57" value="0.90" oninput="updateProductPrice(57, 'usd', this.value)" onchange="refreshPriceInputs(57)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(57, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(57, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-57">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-58">
@@ -1158,7 +1166,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-58" value="1.00" oninput="updateProductPrice(58, 'usd', this.value)" onchange="refreshPriceInputs(58)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(58, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(58, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-58">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-59">
@@ -1175,7 +1183,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-59" value="0.31" oninput="updateProductPrice(59, 'usd', this.value)" onchange="refreshPriceInputs(59)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(59, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(59, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-59">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-60">
@@ -1192,7 +1200,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-60" value="0.58" oninput="updateProductPrice(60, 'usd', this.value)" onchange="refreshPriceInputs(60)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(60, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(60, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-60">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-61">
@@ -1209,7 +1217,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-61" value="0.71" oninput="updateProductPrice(61, 'usd', this.value)" onchange="refreshPriceInputs(61)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(61, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(61, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-61">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-62">
@@ -1226,7 +1234,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-62" value="1.06" oninput="updateProductPrice(62, 'usd', this.value)" onchange="refreshPriceInputs(62)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(62, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(62, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-62">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-63">
@@ -1243,7 +1251,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-63" value="0.84" oninput="updateProductPrice(63, 'usd', this.value)" onchange="refreshPriceInputs(63)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(63, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(63, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-63">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-64">
@@ -1260,7 +1268,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-64" value="0.84" oninput="updateProductPrice(64, 'usd', this.value)" onchange="refreshPriceInputs(64)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(64, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(64, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-64">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-65">
@@ -1277,7 +1285,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-65" value="1.12" oninput="updateProductPrice(65, 'usd', this.value)" onchange="refreshPriceInputs(65)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(65, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(65, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-65">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-66">
@@ -1294,7 +1302,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-66" value="1.62" oninput="updateProductPrice(66, 'usd', this.value)" onchange="refreshPriceInputs(66)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(66, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(66, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-66">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-67">
@@ -1311,7 +1319,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-67" value="2.44" oninput="updateProductPrice(67, 'usd', this.value)" onchange="refreshPriceInputs(67)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(67, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(67, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-67">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-68">
@@ -1328,7 +1336,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-68" value="1.76" oninput="updateProductPrice(68, 'usd', this.value)" onchange="refreshPriceInputs(68)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(68, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(68, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-68">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-69">
@@ -1345,7 +1353,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-69" value="3.04" oninput="updateProductPrice(69, 'usd', this.value)" onchange="refreshPriceInputs(69)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(69, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(69, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-69">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-70">
@@ -1362,7 +1370,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-70" value="1.86" oninput="updateProductPrice(70, 'usd', this.value)" onchange="refreshPriceInputs(70)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(70, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(70, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-70">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-71">
@@ -1379,7 +1387,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-71" value="0.80" oninput="updateProductPrice(71, 'usd', this.value)" onchange="refreshPriceInputs(71)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(71, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(71, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-71">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-72">
@@ -1396,7 +1404,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-72" value="1.91" oninput="updateProductPrice(72, 'usd', this.value)" onchange="refreshPriceInputs(72)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(72, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(72, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-72">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-73">
@@ -1413,7 +1421,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-73" value="3.07" oninput="updateProductPrice(73, 'usd', this.value)" onchange="refreshPriceInputs(73)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(73, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(73, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-73">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-74">
@@ -1430,7 +1438,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-74" value="1.74" oninput="updateProductPrice(74, 'usd', this.value)" onchange="refreshPriceInputs(74)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(74, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(74, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-74">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-75">
@@ -1447,7 +1455,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-75" value="2.28" oninput="updateProductPrice(75, 'usd', this.value)" onchange="refreshPriceInputs(75)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(75, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(75, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-75">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-76">
@@ -1464,7 +1472,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-76" value="2.28" oninput="updateProductPrice(76, 'usd', this.value)" onchange="refreshPriceInputs(76)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(76, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(76, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-76">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-77">
@@ -1481,7 +1489,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-77" value="0.27" oninput="updateProductPrice(77, 'usd', this.value)" onchange="refreshPriceInputs(77)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(77, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(77, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-77">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-78">
@@ -1498,7 +1506,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-78" value="5.97" oninput="updateProductPrice(78, 'usd', this.value)" onchange="refreshPriceInputs(78)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(78, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(78, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-78">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-79">
@@ -1515,7 +1523,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-79" value="11.66" oninput="updateProductPrice(79, 'usd', this.value)" onchange="refreshPriceInputs(79)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(79, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(79, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-79">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-80">
@@ -1532,7 +1540,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-80" value="0.11" oninput="updateProductPrice(80, 'usd', this.value)" onchange="refreshPriceInputs(80)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(80, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(80, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-80">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-81">
@@ -1549,7 +1557,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-81" value="0.77" oninput="updateProductPrice(81, 'usd', this.value)" onchange="refreshPriceInputs(81)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(81, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(81, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-81">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-82">
@@ -1566,7 +1574,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-82" value="0.16" oninput="updateProductPrice(82, 'usd', this.value)" onchange="refreshPriceInputs(82)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(82, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(82, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-82">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-83">
@@ -1583,7 +1591,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-83" value="0.39" oninput="updateProductPrice(83, 'usd', this.value)" onchange="refreshPriceInputs(83)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(83, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(83, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-83">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-84">
@@ -1600,7 +1608,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-84" value="0.51" oninput="updateProductPrice(84, 'usd', this.value)" onchange="refreshPriceInputs(84)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(84, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(84, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-84">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-85">
@@ -1617,7 +1625,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-85" value="7.25" oninput="updateProductPrice(85, 'usd', this.value)" onchange="refreshPriceInputs(85)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(85, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(85, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-85">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-86">
@@ -1634,7 +1642,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-86" value="13.03" oninput="updateProductPrice(86, 'usd', this.value)" onchange="refreshPriceInputs(86)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(86, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(86, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-86">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-87">
@@ -1651,7 +1659,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-87" value="3.82" oninput="updateProductPrice(87, 'usd', this.value)" onchange="refreshPriceInputs(87)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(87, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(87, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-87">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-88">
@@ -1668,7 +1676,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-88" value="0.29" oninput="updateProductPrice(88, 'usd', this.value)" onchange="refreshPriceInputs(88)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(88, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(88, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-88">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-89">
@@ -1685,7 +1693,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-89" value="0.29" oninput="updateProductPrice(89, 'usd', this.value)" onchange="refreshPriceInputs(89)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(89, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(89, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-89">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-90">
@@ -1702,7 +1710,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-90" value="4.11" oninput="updateProductPrice(90, 'usd', this.value)" onchange="refreshPriceInputs(90)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(90, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(90, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-90">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-91">
@@ -1719,7 +1727,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-91" value="4.46" oninput="updateProductPrice(91, 'usd', this.value)" onchange="refreshPriceInputs(91)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(91, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(91, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-91">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-92">
@@ -1736,7 +1744,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-92" value="1.03" oninput="updateProductPrice(92, 'usd', this.value)" onchange="refreshPriceInputs(92)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(92, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="" oninput="updateQuantity(92, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-92">$0.00</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-1792155924191">
@@ -1753,7 +1761,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-1792155924191" value="1.40" oninput="updateProductPrice(1792155924191, 'usd', this.value)" onchange="refreshPriceInputs(1792155924191)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792155924191, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792155924191, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-1792155924191">$1.40</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-1792155959603">
@@ -1770,7 +1778,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-1792155959603" value="0.86" oninput="updateProductPrice(1792155959603, 'usd', this.value)" onchange="refreshPriceInputs(1792155959603)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792155959603, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792155959603, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-1792155959603">$0.86</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-1792155981432">
@@ -1787,7 +1795,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-1792155981432" value="0.49" oninput="updateProductPrice(1792155981432, 'usd', this.value)" onchange="refreshPriceInputs(1792155981432)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792155981432, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792155981432, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-1792155981432">$0.49</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-1792156054475">
@@ -1804,7 +1812,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-1792156054475" value="4.89" oninput="updateProductPrice(1792156054475, 'usd', this.value)" onchange="refreshPriceInputs(1792156054475)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792156054475, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792156054475, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-1792156054475">$4.89</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-1792157615949">
@@ -1821,7 +1829,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-1792157615949" value="7.39" oninput="updateProductPrice(1792157615949, 'usd', this.value)" onchange="refreshPriceInputs(1792157615949)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792157615949, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792157615949, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-1792157615949">$7.39</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-1792157642691">
@@ -1838,7 +1846,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-1792157642691" value="8.41" oninput="updateProductPrice(1792157642691, 'usd', this.value)" onchange="refreshPriceInputs(1792157642691)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792157642691, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792157642691, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-1792157642691">$8.41</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-1792158252629">
@@ -1855,7 +1863,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-1792158252629" value="4.89" oninput="updateProductPrice(1792158252629, 'usd', this.value)" onchange="refreshPriceInputs(1792158252629)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792158252629, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792158252629, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-1792158252629">$4.89</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-1792158293499">
@@ -1872,7 +1880,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-1792158293499" value="5.93" oninput="updateProductPrice(1792158293499, 'usd', this.value)" onchange="refreshPriceInputs(1792158293499)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792158293499, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792158293499, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-1792158293499">$5.93</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-1792158310771">
@@ -1889,7 +1897,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-1792158310771" value="2.30" oninput="updateProductPrice(1792158310771, 'usd', this.value)" onchange="refreshPriceInputs(1792158310771)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792158310771, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792158310771, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-1792158310771">$2.30</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-1792158432805">
@@ -1906,7 +1914,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-1792158432805" value="1.30" oninput="updateProductPrice(1792158432805, 'usd', this.value)" onchange="refreshPriceInputs(1792158432805)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792158432805, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792158432805, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-1792158432805">$1.30</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-1792158457137">
@@ -1923,7 +1931,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-1792158457137" value="1.76" oninput="updateProductPrice(1792158457137, 'usd', this.value)" onchange="refreshPriceInputs(1792158457137)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792158457137, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792158457137, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-1792158457137">$1.76</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-1792158492999">
@@ -1940,7 +1948,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-1792158492999" value="1.39" oninput="updateProductPrice(1792158492999, 'usd', this.value)" onchange="refreshPriceInputs(1792158492999)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792158492999, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792158492999, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-1792158492999">$1.39</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-1792158574559">
@@ -1957,7 +1965,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-1792158574559" value="1.53" oninput="updateProductPrice(1792158574559, 'usd', this.value)" onchange="refreshPriceInputs(1792158574559)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792158574559, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792158574559, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-1792158574559">$1.53</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-1792158616922">
@@ -1974,7 +1982,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-1792158616922" value="1.87" oninput="updateProductPrice(1792158616922, 'usd', this.value)" onchange="refreshPriceInputs(1792158616922)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792158616922, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792158616922, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-1792158616922">$1.87</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-1792158646612">
@@ -1991,7 +1999,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-1792158646612" value="3.12" oninput="updateProductPrice(1792158646612, 'usd', this.value)" onchange="refreshPriceInputs(1792158646612)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792158646612, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792158646612, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-1792158646612">$3.12</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-1792158876900">
@@ -2008,7 +2016,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-1792158876900" value="0.36" oninput="updateProductPrice(1792158876900, 'usd', this.value)" onchange="refreshPriceInputs(1792158876900)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792158876900, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792158876900, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-1792158876900">$0.36</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-1792159042531">
@@ -2025,7 +2033,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-1792159042531" value="2.09" oninput="updateProductPrice(1792159042531, 'usd', this.value)" onchange="refreshPriceInputs(1792159042531)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792159042531, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792159042531, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-1792159042531">$2.09</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-1792159694517">
@@ -2042,7 +2050,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-1792159694517" value="3.35" oninput="updateProductPrice(1792159694517, 'usd', this.value)" onchange="refreshPriceInputs(1792159694517)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792159694517, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792159694517, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-1792159694517">$3.35</td>
                 </tr><tr class="transition-colors border-b border-gray-100 hover:bg-indigo-50/50" id="row-1792160327524">
@@ -2059,7 +2067,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-1792160327524" value="0.97" oninput="updateProductPrice(1792160327524, 'usd', this.value)" onchange="refreshPriceInputs(1792160327524)" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792160327524, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="1" oninput="updateQuantity(1792160327524, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-1792160327524">$0.97</td>
                 </tr></tbody>
@@ -2767,7 +2775,7 @@
                         <input type="number" step="0.01" min="0" id="pusd-${p.id}" value="${p.priceUsd.toFixed(2)}" oninput="updateProductPrice(${p.id}, 'usd', this.value)" onchange="refreshPriceInputs(${p.id})" class="w-full min-w-[4.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </td>
                     <td class="py-2.5 px-2 text-center border-l border-gray-100">
-                        <input type="number" min="0" placeholder="0" value="${qtyDisplay}" oninput="updateQuantity(${p.id}, this.value)" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
+                        <input type="number" min="0" placeholder="0" value="${qtyDisplay}" oninput="updateQuantity(${p.id}, this.value)" enterkeyhint="next" class="qty-input w-20 text-center border border-gray-300 rounded-lg py-1 px-1 focus:ring-2 focus:ring-indigo-500 font-bold bg-white">
                     </td>
                     <td class="py-2.5 px-3 text-right font-bold text-emerald-600 font-mono border-l border-gray-100" id="subtotal-${p.id}">$${subtotal}</td>
                 `;
@@ -3215,6 +3223,48 @@
             renderCurrentTab();
         }
 
+        // Al escribir cantidades: la fila activa sube justo debajo de las pestañas y la barra se achica
+        function mfPonArriba(inp) {
+            const row = inp.closest('tr');
+            if (!row) return;
+            const go = () => {
+                const vv = window.visualViewport;
+                const tabs = document.getElementById('mfTabs');
+                const tb = tabs ? tabs.getBoundingClientRect().bottom : 0;
+                const top = Math.max(vv ? vv.offsetTop : 0, tb) + 6;
+                window.scrollBy({ top: row.getBoundingClientRect().top - top, behavior: 'instant' });
+            };
+            go(); setTimeout(go, 180); setTimeout(go, 450);
+        }
+        document.addEventListener('focusin', e => {
+            const t = e.target;
+            if (!t || t.tagName !== 'INPUT' || t.type !== 'number') return;
+            document.body.classList.add('kb');
+            document.querySelectorAll('tr.mf-cur').forEach(x => x.classList.remove('mf-cur'));
+            if (t.classList.contains('qty-input') || t.closest('#shoppingListContainer')) {
+                const tr = t.closest('tr'); if (tr) tr.classList.add('mf-cur');
+                mfPonArriba(t);
+            }
+        });
+        document.addEventListener('focusout', e => {
+            setTimeout(() => {
+                const a = document.activeElement;
+                if (!(a && a.tagName === 'INPUT' && a.type === 'number')) {
+                    document.body.classList.remove('kb');
+                    document.querySelectorAll('tr.mf-cur').forEach(x => x.classList.remove('mf-cur'));
+                }
+            }, 60);
+        });
+        // Siguiente (Enter): pasa a la próxima cantidad visible
+        document.addEventListener('keydown', e => {
+            const t = e.target;
+            if (e.key !== 'Enter' || !t.classList || !t.classList.contains('qty-input')) return;
+            e.preventDefault();
+            const all = [...document.querySelectorAll('.tab-content:not(.hidden) .qty-input')].filter(x => x.offsetParent);
+            const nx = all[all.indexOf(t) + 1];
+            if (nx) { nx.focus({ preventScroll: true }); nx.select && nx.select(); } else t.blur();
+        });
+
         // Barra de abajo: total del pedido y lo confirmado, en cualquier pestaña
         function updateMfBar() {
             const bar = document.getElementById('mfBar');
@@ -3228,7 +3278,7 @@
             let t = 0, ok = 0, okN = 0, noN = 0;
             items.forEach(i => { const v = i.qty * i.usd * IVA; t += v; if (i.m === 'ok') { ok += v; okN++; } else if (i.m === 'no') noN++; });
             const bs = n => 'Bs. ' + (n * rate).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            document.getElementById('mfN').innerHTML = items.length + (items.length === 1 ? ' producto' : ' productos') + (l ? '<br>Lista: ' + esc(l.name) : (currentTab === 'missing' ? '<br>Faltantes' : '<br>Pedido · con IVA'));
+            document.getElementById('mfN').innerHTML = items.length + (items.length === 1 ? ' producto' : ' productos') + '<span class="mf2"><br>' + (l ? 'Lista: ' + esc(l.name) : (currentTab === 'missing' ? 'Faltantes' : 'Pedido · con IVA')) + '</span>';
             document.getElementById('mfT').innerHTML = '$' + t.toFixed(2) + '<span>' + bs(t) + '</span>';
             document.getElementById('mfOk').textContent = '$' + ok.toFixed(2);
             document.getElementById('mfOkN').textContent = okN;

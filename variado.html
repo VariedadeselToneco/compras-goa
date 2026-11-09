@@ -609,10 +609,10 @@ $('list').addEventListener('click',e=>{const id=e.target.dataset.edit;if(id)open
 function ponArriba(inp){
   const card=inp.closest('.item');if(!card)return;
   const hs=[...document.querySelectorAll('.top,.abar')].filter(x=>x.offsetParent).map(x=>x.offsetHeight);
-  const go=()=>window.scrollBy({top:card.getBoundingClientRect().top-(Math.max(0,...hs)+8),behavior:'instant'});
-  go();setTimeout(go,120);
+  const go=()=>{const vv=window.visualViewport;window.scrollBy({top:card.getBoundingClientRect().top-(Math.max(vv?vv.offsetTop:0,...hs)+8),behavior:'instant'})};
+  go();setTimeout(go,180);setTimeout(go,450);
 }
-$('list').addEventListener('focusin',e=>{if(!e.target.classList.contains('qty'))return;document.querySelectorAll('#list .item.cur').forEach(x=>x.classList.remove('cur'));e.target.closest('.item').classList.add('cur')});
+$('list').addEventListener('focusin',e=>{if(!e.target.classList.contains('qty'))return;document.querySelectorAll('#list .item.cur').forEach(x=>x.classList.remove('cur'));e.target.closest('.item').classList.add('cur');ponArriba(e.target)});
 $('list').addEventListener('focusout',e=>{const c=e.target.closest&&e.target.closest('.item');if(c)c.classList.remove('cur')});
 
 $('q').addEventListener('input',render);
