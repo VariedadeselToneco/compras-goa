@@ -2,7 +2,7 @@
 <html lang="es"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cotizador y Control de Compras - Sol 22</title>
+    <title>Cotizador y Control de Compras - Mundo Famoso</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -40,14 +40,14 @@
 <script>if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script>
 </head>
 <body class="bg-gray-100 text-gray-800 min-h-screen pb-12">
-<nav class="goa-sw"><a href="./">🛒 Orden de compra</a><a href="checklist.html" class="on">✅ Checklist Sol 22</a></nav>
+<nav class="goa-sw"><a href="./">🛒 Mercabar</a><a href="checklist.html" class="on">✅ Mundo Famoso</a><a href="variado.html">🧺 Variado</a></nav>
 
     <!-- HEADER Y NAVEGACIÓN PRINCIPAL -->
     <header class="bg-indigo-700 text-white shadow-lg sticky top-0 z-30">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
             <div class="text-center sm:text-left">
                 <h1 class="text-xl sm:text-2xl font-bold flex items-center justify-center sm:justify-start gap-2">
-                    <i class="fa-solid fa-store text-yellow-400"></i> Sol 22 - Control de Compras
+                    <i class="fa-solid fa-store text-yellow-400"></i> Mundo Famoso - Control de Compras
                 </h1>
                 <p id="rateStatusText" class="text-xs text-indigo-200">Tasa BCV actualizada: Bs. 880.1159 / USD</p>
             </div>
@@ -102,7 +102,7 @@
         </div>
     </header>
 <div id="sugSol" style="display:none;margin:10px auto 0;max-width:80rem;padding:0 12px"><div style="background:#312e81;color:#fff;border-radius:14px;padding:12px;display:flex;gap:10px;align-items:center;font-family:system-ui,Arial,sans-serif">
-<div style="flex:1;min-width:0;font-size:13.5px;line-height:1.35"><b style="color:#fcd34d;font-size:15px">Pedido sugerido Sol 22 · 8 días</b><br><span id="sugSolTxt"></span></div>
+<div style="flex:1;min-width:0;font-size:13.5px;line-height:1.35"><b style="color:#fcd34d;font-size:15px">Pedido sugerido Mundo Famoso · 8 días</b><br><span id="sugSolTxt"></span></div>
 <button type="button" id="sugSolGo" style="border:0;border-radius:10px;padding:10px 12px;font-weight:700;background:#f59e0b;color:#1e1b4b;cursor:pointer">Cargar</button>
 <button type="button" id="sugSolNo" aria-label="Ocultar" style="border:0;border-radius:10px;padding:10px 12px;font-weight:700;background:rgba(255,255,255,.15);color:#fff;cursor:pointer">✕</button></div></div>
 
@@ -3274,7 +3274,7 @@
             const blob = new Blob([JSON.stringify(currentBackupObject())], { type: 'application/json' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = `Respaldo_Sol22_${new Date().toISOString().slice(0, 10)}.json`;
+            link.download = `Respaldo_MundoFamoso_${new Date().toISOString().slice(0, 10)}.json`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -3283,7 +3283,7 @@
 
         function restoreFromObject(data) {
             if (!data || data.app !== 'sol22' || !Array.isArray(data.productos)) {
-                throw new Error("El archivo no es un respaldo válido de Sol 22.");
+                throw new Error("El archivo no es un respaldo válido de Mundo Famoso.");
             }
             const rate = parseFloat(data.tasa) || getCurrentRate();
             const prods = data.productos.filter(p => p && typeof p.name === 'string' && isFinite(parseFloat(p.priceBs)));
@@ -3432,7 +3432,7 @@
             }
 
             const rate = getCurrentRate();
-            let text = `🛒 *PEDIDO SOL 22*${ctx.title ? ' - ' + ctx.title : ''}\n\n`;
+            let text = `🛒 *PEDIDO MUNDO FAMOSO*${ctx.title ? ' - ' + ctx.title : ''}\n\n`;
             let subtotalUSD = 0;
 
             ctx.items.forEach(i => {
@@ -3462,7 +3462,7 @@
 
         function sendEmail() {
             const text = generateSummaryText();
-            if (text) window.location.href = `mailto:?subject=${encodeURIComponent("Resumen Pedido Sol 22")}&body=${encodeURIComponent(text)}`;
+            if (text) window.location.href = `mailto:?subject=${encodeURIComponent("Resumen Pedido Mundo Famoso")}&body=${encodeURIComponent(text)}`;
         }
 
         function downloadSelfHTML() {
@@ -3470,7 +3470,7 @@
             const blob = new Blob([htmlContent], { type: "text/html;charset=utf-8" });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.download = "Checklist_Sol22_Offline.html";
+            link.download = "Checklist_MundoFamoso_Offline.html";
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -3929,7 +3929,7 @@
         }
 
 
-        // Pedido sugerido para Sol 22 (armado con las ventas del 19 al 25/10). Las cantidades salen de la tasa del día.
+        // Pedido sugerido para Mundo Famoso (armado con las ventas del 19 al 25/10). Las cantidades salen de la tasa del día.
         const PEDIDO_SUGERIDO = {"id": "2026-10-27b", "fecha": "27/10/2026", "items": [{"n": "BOMBILLO RECARGABLE AWA 40W", "usd": 14.26, "de": "BOMBILLO RECARGABLE 40W"}, {"n": "PRESTOBARBA DORCO", "usd": 8.65, "de": "PRESTOBARBA DORCO"}, {"n": "CEPILLO DENTAL MAKSIM [1X12]", "usd": 8.31, "de": "CEPILLO DENTAL"}, {"n": "YESQUERO G X50UND", "usd": 6.74, "de": "YESQUERO"}, {"n": "COCOSETTE 18UNIDA", "usd": 3.87, "de": "COCOSETTE 50gr"}]};
         function sugSolItems() {
             const rate = getCurrentRate();
@@ -3950,7 +3950,7 @@
         }
         function cargarSugSol() {
             const L = sugSolItems(); if (!L.length) return;
-            if (!confirm('¿Cargar el pedido sugerido de Sol 22?\n' + L.map(x => x.q + ' x ' + x.p.name).join('\n') + '\n\nSe ponen esas cantidades en el catálogo. Revísalas antes de guardar la lista.')) return;
+            if (!confirm('¿Cargar el pedido sugerido de Mundo Famoso?\n' + L.map(x => x.q + ' x ' + x.p.name).join('\n') + '\n\nSe ponen esas cantidades en el catálogo. Revísalas antes de guardar la lista.')) return;
             L.forEach(x => { x.p.selectedQty = x.q; x.p.purchased = false; });
             saveProductsLocally();
             localStorage.setItem('sol22_sug_' + PEDIDO_SUGERIDO.id, '1');

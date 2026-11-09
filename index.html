@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0b1f3a">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>Compras GOA</title>
+<title>Mercabar · Compras GOA</title>
 <style>
 :root{
   --navy:#0b1f3a; --navy2:#13305a; --gold:#f2b632; --gold2:#ffd36b;
@@ -230,10 +230,10 @@ header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;pa
 <script>if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script>
 </head>
 <body>
-<nav class="goa-sw"><a href="./" class="on">🛒 Orden de compra</a><a href="checklist.html">✅ Checklist Sol 22</a></nav>
+<nav class="goa-sw"><a href="./" class="on">🛒 Mercabar</a><a href="checklist.html">✅ Mundo Famoso</a><a href="variado.html">🧺 Variado</a></nav>
 <header class="mainhead">
   <div class="logo" id="logoBox"></div>
-  <div class="ptag">ORDEN DE<br>COMPRA</div>
+  <div class="ptag">PEDIDO<br>MERCABAR</div>
   <input type="file" id="logoFile" accept="image/*" hidden>
 </header>
 
@@ -483,7 +483,7 @@ Object.assign(KG,{"PASTA MARY VERMICELLI 1KG 1X12":12,"SAL ENSAL 1KG 1X26UND":26
  "AZUCAR EL GALAN 1KG 1X20":20,"AZUCAR MI ANGEL 1KG 1X24 UNIDADES":24,"HARINA PAN DE MAIZ 1X20KG":20,
  "MEZCLA DE HARINA DOÑA EMILIA 900G 1X20":18,"HARINA DE TRIGO ROBIN HOOD TODO USO 1X20":18,"HARINA MAIZ BLANCO MARY 1X20":20});
 
-const KEY='goa_compras_v1', VER=6;
+const KEY='goa_compras_v1', VER=6, PROV='Mercabar';
 const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 
 const mk=(p,i)=>({id:'p'+i, name:p[0], price:FIX[p[0]]??p[1], kg:KG[p[0]]||0});
@@ -554,9 +554,10 @@ function render(){
 const SUGERIDO={"id": "2026-10-27c", "fecha": "27/10/2026", "dias": 8, "total": 3277.9, "sinPrecio": 0, "items": [{"n": "HARINA DE MAIZ MIMASA 900G 1X20", "q": 16, "p": 13.9}, {"n": "QUESO (KG)", "q": 21, "p": 6.5}, {"n": "PASTA LA ESPECIAL VERMICELLI 1KG 1X12", "q": 9, "p": 14.66}, {"n": "ACEITE AGROIL 800 ML", "q": 5, "p": 25.1}, {"n": "HARINA AREPAMIA 900G 1X20", "q": 10, "p": 12.0}, {"n": "HARINA PRECOCIDA YARACUY 900G 1X20", "q": 8, "p": 13.9}, {"n": "MEZCLA DE HARINA DOÑA EMILIA 900G 1X20", "q": 7, "p": 14.51}, {"n": "HUEVO CALIDAD (1/2CARTON)", "q": 38, "p": 2.43}, {"n": "CHIMO APUREÑO", "q": 22, "p": 4.11}, {"n": "CIGARRO CONSUL 1X10 UND", "q": 7, "p": 12.9}, {"n": "ARROZ BLANCO TIPO I MARY TRADICIONAL 900G", "q": 6, "p": 14.65}, {"n": "LECHE EN POLVO DO BON 400G 1X25", "q": 1, "p": 85.49}, {"n": "SARDINA OMEGA EN TOMATE 1X24", "q": 6, "p": 14.0}, {"n": "ARROZ BLANCO MIMASA TRADICIONAL 900GX24", "q": 5, "p": 14.6}, {"n": "MARGARINA DELINE 250GR (UND)", "q": 47, "p": 1.38}, {"n": "CONSUL PALLMAL CAJA (CAJA)", "q": 83, "p": 0.75}, {"n": "AZUCAR LA PASTORA REFINO 1KG 1X20", "q": 2, "p": 22.5}, {"n": "DETERGENTE ALIVE 500GR (UND)", "q": 41, "p": 1.07}, {"n": "SARDINA ECONOMICA (LATA)", "q": 80, "p": 0.51}, {"n": "SUNTY 1.5LT (UND)", "q": 51, "p": 0.79}, {"n": "MAYONESA MAVESA 175G 1X24", "q": 1, "p": 40.0}, {"n": "DETERGENTE ALIVE 1KG (UND)", "q": 18, "p": 2.1}, {"n": "PASTA CORTA SINDONI KG PREMIUM (KG)", "q": 26, "p": 1.44}, {"n": "AZUCAR COMINKA 900G 1X20UND", "q": 2, "p": 18.6}, {"n": "AZUCAR EL GALAN 1KG 1X20", "q": 2, "p": 18.55}, {"n": "ROYAL (CAJA)", "q": 77, "p": 0.48}, {"n": "PASTA SINDONI KILO LARGA (KG)", "q": 29, "p": 1.21}, {"n": "PLATANITO (UND)", "q": 42, "p": 0.83}, {"n": "MARGARINA MAVESA 250G 1X24", "q": 1, "p": 34.92}, {"n": "COCACOLA 2L", "q": 4, "p": 8.5}, {"n": "DESODORANTE BALANCE CABALLERO POMO 32G", "q": 1, "p": 33.05}, {"n": "BAMBINOS GRANDE (PAQUETE)", "q": 33, "p": 1.0}, {"n": "POLLO PICADO (KG)", "q": 9, "p": 3.67}, {"n": "LECHE EN POLVO LA CAMPIÑA 400GR (1/2 KILO)", "q": 5, "p": 6.53}, {"n": "CAFE AMERICO ADRIANI 200G (UND)", "q": 16, "p": 2.0}, {"n": "MARGARINA MAVESA 500G 1X12", "q": 1, "p": 31.25}, {"n": "CAFE HEIDY 30 UND X 100GR", "q": 1, "p": 29.95}, {"n": "CAFE HEIDY 15 UND X 200GR", "q": 1, "p": 29.95}, {"n": "DESODORANTE SPEED STICK 30G 1X6", "q": 4, "p": 7.2}, {"n": "CAFE DELLA NONNA 100GR (UND)", "q": 22, "p": 1.28}, {"n": "BELMONT CAJA (CAJA)", "q": 10, "p": 2.64}, {"n": "CHIMO EL TIGRITO AMARILLO 1X12", "q": 5, "p": 5.25}, {"n": "ACEITE VATEL SOYA 800ML 1X12", "q": 1, "p": 26.0}, {"n": "REFRESCO BIG COLA 2L 1X6 UND", "q": 5, "p": 4.9}, {"n": "JUSTY NARANJA 1.5L (UND)", "q": 29, "p": 0.84}, {"n": "RIKESA 200GR (UND)", "q": 7, "p": 3.47}, {"n": "PANELA TRADICIONAL 250GR LAS LLAVES (UND)", "q": 22, "p": 1.08}, {"n": "PASTA SINDONI LARGA 1KG (KG)", "q": 16, "p": 1.42}, {"n": "MORTADELA DON RAMON 900G (UND)", "q": 11, "p": 2.04}, {"n": "SUERO ANGEL (UND)", "q": 16, "p": 1.4}, {"n": "PAPEL HIGIENICO ALISOF 600 HOJAS 4X12", "q": 1, "p": 21.74}, {"n": "ARROZ MASIA 900G (KG)", "q": 31, "p": 0.68}, {"n": "SUN COLA 2 LITROS (UND)", "q": 26, "p": 0.81}, {"n": "BAMBINO GRANDE (PAQUETE)", "q": 21, "p": 1.0}, {"n": "CAFE AMANECER 200GR (UND)", "q": 9, "p": 2.19}, {"n": "AVENA GRANEL (1/2 KILO)", "q": 28, "p": 0.7}, {"n": "VICERROY (CAJA)", "q": 11, "p": 1.73}, {"n": "ACEITE OLIVA 500ML (500gr)", "q": 4, "p": 4.74}, {"n": "PEPITO RIKOS (UND)", "q": 41, "p": 0.45}, {"n": "PASTA CARACOL KGR (KG)", "q": 12, "p": 1.43}, {"n": "LECHE EN POLVO CAMPIÑA 200GR (UND)", "q": 5, "p": 3.36}, {"n": "COMPOTA OSOLE 100GR (UND)", "q": 35, "p": 0.45}, {"n": "GALLETAS DE SODA CARABOBO 1X12 240GR", "q": 1, "p": 15.4}, {"n": "MORTADELA CARACAS 500G 1X10", "q": 1, "p": 15.3}, {"n": "SUN COLA 400ML (UND)", "q": 51, "p": 0.3}, {"n": "CHICHARRON (UND)", "q": 17, "p": 0.9}, {"n": "MORTADELA DON RAMON 600G (UND)", "q": 11, "p": 1.38}, {"n": "HARINA DE MAIZ DOÑA EMILIA 900G 1X20", "q": 1, "p": 14.75}, {"n": "CARAOTAS MAIZAL 400G (UND)", "q": 16, "p": 0.9}, {"n": "GALLETAS INDEPENDENCIA (UND)", "q": 31, "p": 0.46}, {"n": "SARDINAS SALSA DE TOMATE INCOSA 170GX24", "q": 1, "p": 13.86}, {"n": "SARDINA INCOSA EN ACEITE VEGETAL 170GX24", "q": 1, "p": 13.86}, {"n": "MARIA ITALIA 150GR 1X12 UNIDADES", "q": 2, "p": 6.75}, {"n": "GALLETA DE SODA (PAQUETE)", "q": 9, "p": 1.5}, {"n": "POLVOROSA (PAQUETE)", "q": 11, "p": 1.2}, {"n": "LUCKY STRIKE NOVA (CAJA)", "q": 4, "p": 3.04}, {"n": "MUSLOS (KG)", "q": 4, "p": 3.0}, {"n": "VASO MAYONESA 500GR (UND)", "q": 8, "p": 1.42}, {"n": "GALLETA PAMPA MARIA 150G (UND)", "q": 23, "p": 0.48}, {"n": "SUN COLA LITRO (LTS)", "q": 20, "p": 0.55}, {"n": "PAPEL LUCIANO 215H (PAQUETE)", "q": 19, "p": 0.57}, {"n": "MARMOLEADA (PAQUETE)", "q": 9, "p": 1.2}, {"n": "GALLETA TAM CORAZON 1X24 UND", "q": 1, "p": 10.6}]};
 function preciosSug(){let c=0;SUGERIDO.items.forEach(x=>{if(!(x.p>0))return;const p=state.products.find(y=>y.name===x.n);if(p&&!(p.price>0)){p.price=x.p;c++}});if(c){save();render()}}
 function renderSug(){const b=$('sug');if(!b)return;
+  if(!SUGERIDO.items.length){b.hidden=true;return}
   if(state.sugVisto===SUGERIDO.id){b.hidden=true;return}
   b.hidden=false;b.innerHTML='';const t=document.createElement('div');t.className='t';
-  t.innerHTML='<b>Pedido sugerido para '+SUGERIDO.dias+' días</b><br>'+SUGERIDO.items.length+' productos · '+fmt(SUGERIDO.total)+(SUGERIDO.sinPrecio?' · '+SUGERIDO.sinPrecio+' sin precio':'')+'<br>Lo de Sol 22 está en su checklist.';
+  t.innerHTML='<b>Pedido sugerido para '+SUGERIDO.dias+' días</b><br>'+SUGERIDO.items.length+' productos · '+fmt(SUGERIDO.total)+(SUGERIDO.sinPrecio?' · '+SUGERIDO.sinPrecio+' sin precio':'')+'<br>Lo de Mundo Famoso está en su checklist.';
   const go=document.createElement('button');go.className='go';go.type='button';go.textContent='Cargar';go.onclick=cargarSug;
   const no=document.createElement('button');no.className='no';no.type='button';no.textContent='✕';no.setAttribute('aria-label','Ocultar');no.onclick=()=>{state.sugVisto=SUGERIDO.id;save();renderSug()};
   b.append(t,go,no)}
@@ -733,7 +734,7 @@ $('waBtn').onclick=()=>{
   const sel=sorted().filter(p=>num(state.qty[p.id])>0);
   if(!sel.length){toast('Coloca al menos una cantidad');return}
   const r=totals();
-  let t='*GOA Business — Orden de compra*\n';
+  let t='*GOA Business — Pedido '+PROV+'*\n';
   if(state.prov)t+='Proveedor: '+state.prov+'\n';
   t+='Fecha: '+new Date().toLocaleDateString('es-VE')+'\n\n';
   sel.forEach(p=>{const q=num(state.qty[p.id]);
@@ -851,7 +852,7 @@ $('oFile').onclick=()=>{
   const d={id:Date.now().toString(36),fecha:today(),prov:state.prov||'',from:'GOA Business',reply:state.myTel||'',
     items:items.map(i=>({name:i.name,qty:i.qty,price:i.price,mark:''}))};
   const html=CK_TPL.replace('__LOGO__',DEFAULT_LOGO).replace('__DATA__',JSON.stringify(d).replace(/</g,'\\u003c'));
-  shareFile(html,'Pedido_GOA_'+d.fecha.replace(/\D/g,'-')+'.html','Pedido GOA Business: abre el archivo, marca lo que hay y lo que no, y respóndeme por WhatsApp.');
+  shareFile(html,'Pedido_'+PROV.replace(/\s+/g,'_')+'_'+d.fecha.replace(/\D/g,'-')+'.html','Pedido GOA Business: abre el archivo, marca lo que hay y lo que no, y respóndeme por WhatsApp.');
 };
 
 // ================= HISTORIAL =================
