@@ -2288,6 +2288,8 @@
                         <option value="catalog">Catálogo Principal (Con Pasillo)</option>
                         <option value="granos">Granos</option>
                         <option value="charcuteria">Charcutería</option>
+                        <option value="mercabar">🛒 Mercabar (otra pestaña)</option>
+                        <option value="variado">🧺 Variado (otra pestaña)</option>
                     </select>
                 </div>
 
@@ -3601,6 +3603,22 @@
             
             const priceUsd = parseFloat(document.getElementById('newProdPriceUsd').value) || 0;
             const priceBs = parseFloat(document.getElementById('newProdPriceBs').value) || (priceUsd * getCurrentRate());
+
+            // Mercabar o Variado: el producto se manda a esa pestaña
+            if (category === 'mercabar' || category === 'variado') {
+                const dest = category === 'mercabar' ? 'Mercabar' : 'Variado';
+                const usd = +(priceUsd || (priceBs / getCurrentRate()) || 0).toFixed(2);
+                if (editingId !== null && !confirm(`¿Pasar "${name}" a ${dest}?\nSe quita de Mundo Famoso.`)) return;
+                const pk = 'goa_pend_' + category;
+                let pend = []; try { pend = JSON.parse(localStorage.getItem(pk)) || []; } catch (e) {}
+                pend.push({ name: name, price: usd });
+                localStorage.setItem(pk, JSON.stringify(pend));
+                if (editingId !== null) { products = products.filter(x => x.id !== editingId); saveProductsLocally(); }
+                closeModal();
+                renderCurrentTab();
+                alert(`✅ "${name}" quedó en ${dest}.\nLo verás al abrir la pestaña ${dest}.`);
+                return;
+            }
 
             if (editingId !== null) {
                 const p = products.find(x => x.id === editingId);

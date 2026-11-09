@@ -470,6 +470,8 @@ let areaF=null;
 const nkey=s=>String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
 BASE.forEach((p,i)=>{const id='p'+i;if(!REMOVED.includes(p[0])&&!state.products.some(x=>x.id===id||nkey(x.name)===nkey(p[0]))&&!state.deleted.includes(id))state.products.push(mk(p,i))});
 {const rk=REMOVED.map(nkey);state.products=state.products.filter(p=>{if(rk.includes(nkey(p.name))){delete state.qty[p.id];if(!state.deleted.includes(p.id))state.deleted.push(p.id);return false}return true})}
+// Productos enviados desde Mundo Famoso (Agregar / Editar → Mercabar o Variado)
+{const pk='goa_pend_'+PROV.toLowerCase(),pend=store.get(pk)||[];if(pend.length){pend.forEach((x,i)=>{const ex=state.products.find(p=>nkey(p.name)===nkey(x.name));if(ex){if(x.price>0)ex.price=x.price}else state.products.push({id:'mf'+Date.now().toString(36)+i,name:x.name,price:x.price||0,kg:0,area:guessArea(x.name)})});store.set(pk,[]);store.set(KEY,state)}}
 if((state.v||1)<4)state.logo=null;
 if((state.v||1)<VER){
   const v0=state.v||1;
