@@ -27,6 +27,8 @@
         .mf-bar .r2 .si b { display:block; font-size:18px; color:#4ade80; }
         .mf-bar .r2 .no { background:rgba(220,38,38,.2); color:#fca5a5; }
         .mf-bar .r2 .pe { background:rgba(255,255,255,.08); color:#cbd5e1; }
+        .mf-add { flex:none; background:#f59e0b; color:#1f2937; border:0; border-radius:10px; padding:8px 12px; font-size:13px; font-weight:900; cursor:pointer; }
+        body.kb .mf-add { display:none; }
         body.kb .mf-bar { padding:5px 12px; }
         body.kb .mf-bar .r2, body.kb .mf-bar .r1 b span { display:none; }
         body.kb .mf-bar .r1 { align-items:center; }
@@ -124,6 +126,15 @@
                     <i class="fa-solid fa-clock-rotate-left"></i> 6. Historial
                 </button>
             </div>
+            <div id="mfSearch" class="px-2 pb-2 bg-indigo-900 hidden">
+                <div class="relative flex-1">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400" style="z-index:1">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </span>
+                    <input type="text" id="searchInput" oninput="filterCurrentTabProducts();mfClearBtn();mfVerResultados()" enterkeyhint="search" placeholder="Buscar producto..." class="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <button type="button" id="mfClear" onclick="const i=document.getElementById('searchInput');i.value='';filterCurrentTabProducts();mfClearBtn();i.focus()" class="text-gray-400 font-bold hidden" style="position:absolute;top:0;bottom:0;right:0;z-index:2;padding:0 12px;background:none;border:0;font-size:16px" aria-label="Borrar búsqueda">✕</button>
+                </div>
+            </div>
         </div>
     
 <div id="sugSol" style="display:none;margin:10px auto 0;max-width:80rem;padding:0 12px"><div style="background:#312e81;color:#fff;border-radius:14px;padding:12px;display:flex;gap:10px;align-items:center;font-family:system-ui,Arial,sans-serif">
@@ -137,12 +148,7 @@
         <!-- PANEL DE ACCIONES SUPERIOR REUSABLE -->
         <div id="commonControls" class="bg-white p-3 sm:p-4 rounded-xl shadow-md mb-4 flex flex-wrap justify-between items-center gap-3 hidden">
             <div class="flex-1 min-w-[200px] flex flex-col sm:flex-row gap-2">
-                <div class="relative flex-1">
-                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </span>
-                    <input type="text" id="searchInput" onkeyup="filterCurrentTabProducts()" placeholder="Buscar producto..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                </div>
+
 
                 <div id="aisleFilterContainer" class="w-full sm:w-44">
                     <select id="aisleFilter" onchange="filterCurrentTabProducts()" class="w-full border border-gray-300 rounded-lg py-2 px-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white font-semibold text-gray-700"><option value="ALL">📍 Todos Pasillos</option><option value="CAJA">CAJA</option><option value="Pasillo 1">Pasillo 1</option><option value="Pasillo 2">Pasillo 2</option><option value="Pasillo 3">Pasillo 3</option><option value="Pasillo 4">Pasillo 4</option><option value="Pasillo 5">Pasillo 5</option></select>
@@ -2255,7 +2261,7 @@
 
     <!-- Barra fija: total del pedido y suma de lo confirmado -->
     <div class="mf-bar" id="mfBar">
-        <div class="r1"><small id="mfN">0 productos<br>con IVA</small><b id="mfT">$0.00<span>Bs. 0,00</span></b></div>
+        <div class="r1"><small id="mfN">0 productos<br>con IVA</small><button type="button" class="mf-add" onclick="openModal()">＋ Agregar</button><b id="mfT">$0.00<span>Bs. 0,00</span></b></div>
         <div class="r2" id="mfR2">
             <div class="si">✓ Sí hay (<span id="mfOkN">0</span>)<b id="mfOk">$0.00</b></div>
             <div class="no">✗ No hay<br><span id="mfNo">0</span></div>
@@ -2709,6 +2715,7 @@
             }
 
             document.getElementById(`sec-${tab}`).classList.remove('hidden');
+            document.getElementById('mfSearch').classList.toggle('hidden', !['catalog', 'granos', 'charcuteria'].includes(tab));
             renderCurrentTab();
         }
 
@@ -3265,6 +3272,16 @@
             const nx = all[all.indexOf(t) + 1];
             if (nx) { nx.focus({ preventScroll: true }); nx.select && nx.select(); } else t.blur();
         });
+
+        // Al buscar, sube la lista para que veas los resultados debajo del buscador
+        function mfVerResultados() {
+            const sec = document.querySelector('.tab-content:not(.hidden)');
+            const tabs = document.getElementById('mfTabs');
+            if (!sec || !tabs) return;
+            const d = sec.getBoundingClientRect().top - tabs.getBoundingClientRect().bottom - 6;
+            if (d < 0) window.scrollBy({ top: d, behavior: 'instant' });
+        }
+        function mfClearBtn() { const i = document.getElementById('searchInput'); document.getElementById('mfClear').classList.toggle('hidden', !i.value); }
 
         // Barra de abajo: total del pedido y lo confirmado, en cualquier pestaña
         function updateMfBar() {
