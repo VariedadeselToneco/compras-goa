@@ -10,6 +10,22 @@
         input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         input[type=number] { -moz-appearance: textfield; }
         .purchased-row { background-color: rgba(240, 253, 244, 0.75) !important; }
+        .nohay-row { background-color: rgba(254, 242, 242, 0.85) !important; }
+        .mk2 { display:flex; gap:6px; margin-top:6px; }
+        .mk2 button { flex:1; max-width:90px; min-width:52px; white-space:nowrap; border:1.5px solid #d1d5db; background:#fff; color:#6b7280; border-radius:9px; padding:5px 0; font-size:12px; font-weight:800; cursor:pointer; }
+        .mk2 button.si.on { background:#16a34a; border-color:#16a34a; color:#fff; }
+        .mk2 button.no.on { background:#dc2626; border-color:#dc2626; color:#fff; }
+        .mf-bar { position:fixed; left:0; right:0; bottom:0; z-index:40; background:#0f1b3d; color:#fff; padding:10px 14px calc(10px + env(safe-area-inset-bottom)); box-shadow:0 -6px 18px rgba(0,0,0,.25); }
+        .mf-bar .r1 { display:flex; justify-content:space-between; align-items:flex-end; gap:10px; }
+        .mf-bar .r1 small { font-size:13px; color:#cbd5e1; line-height:1.35; }
+        .mf-bar .r1 b { font-size:26px; color:#fcd34d; white-space:nowrap; line-height:1.1; text-align:right; }
+        .mf-bar .r1 b span { display:block; font-size:12px; color:#fbbf24; font-weight:700; }
+        .mf-bar .r2 { display:flex; gap:8px; margin-top:8px; font-size:13px; font-weight:800; }
+        .mf-bar .r2 div { flex:1; border-radius:9px; padding:6px 8px; text-align:center; line-height:1.25; }
+        .mf-bar .r2 .si { background:rgba(22,163,74,.22); color:#86efac; }
+        .mf-bar .r2 .si b { display:block; font-size:18px; color:#4ade80; }
+        .mf-bar .r2 .no { background:rgba(220,38,38,.2); color:#fca5a5; }
+        .mf-bar .r2 .pe { background:rgba(255,255,255,.08); color:#cbd5e1; }
         .purchased-text { text-decoration: line-through; color: #166534 !important; opacity: 0.75; }
         .tab-active { border-bottom: 3px solid #f59e0b; color: #ffffff !important; font-weight: bold; }
     </style>
@@ -39,7 +55,7 @@
 <link rel="manifest" href="manifest.json">
 <script>if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script>
 </head>
-<body class="bg-gray-100 text-gray-800 min-h-screen pb-12">
+<body class="bg-gray-100 text-gray-800 min-h-screen" style="padding-bottom:170px">
 <nav class="goa-sw"><a href="./">🛒 Mercabar</a><a href="checklist.html" class="on">✅ Mundo Famoso</a><a href="variado.html">🧺 Variado</a></nav>
 
     <!-- HEADER Y NAVEGACIÓN PRINCIPAL -->
@@ -2228,6 +2244,16 @@
         </div>
     </main>
 
+    <!-- Barra fija: total del pedido y suma de lo confirmado -->
+    <div class="mf-bar" id="mfBar">
+        <div class="r1"><small id="mfN">0 productos<br>con IVA</small><b id="mfT">$0.00<span>Bs. 0,00</span></b></div>
+        <div class="r2" id="mfR2">
+            <div class="si">✓ Sí hay (<span id="mfOkN">0</span>)<b id="mfOk">$0.00</b></div>
+            <div class="no">✗ No hay<br><span id="mfNo">0</span></div>
+            <div class="pe">Por revisar<br><span id="mfPe">0</span></div>
+        </div>
+    </div>
+
     <!-- MODAL AGREGAR NUEVO PRODUCTO -->
     <div id="productModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-3 hidden">
         <div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-5 relative">
@@ -2557,14 +2583,14 @@
                 date: now.toLocaleString('es-VE'),
                 items: selected.map(p => ({
                     pid: p.id, name: p.name, category: p.category, aisle: p.aisle || '',
-                    priceBs: p.priceBs, qty: p.selectedQty, purchased: false
+                    priceBs: p.priceBs, qty: p.selectedQty, purchased: p.mark === 'ok', noHay: p.mark === 'no'
                 }))
             };
             savedLists.unshift(list);
             saveListsLocally();
 
             // Catálogo, Granos y Charcutería quedan en blanco para hacer otra lista (los productos NO se borran)
-            products.forEach(p => { p.selectedQty = 0; p.purchased = false; });
+            products.forEach(p => { p.selectedQty = 0; p.purchased = false; p.mark = ''; });
             saveProductsLocally();
 
             openListId = list.id;
@@ -2718,7 +2744,7 @@
 
             filtered.forEach(p => {
                 const tr = document.createElement('tr');
-                tr.className = `transition-colors border-b border-gray-100 hover:bg-indigo-50/50`;
+                tr.className = `transition-colors border-b border-gray-100 hover:bg-indigo-50/50 ${p.selectedQty > 0 && p.mark === 'ok' ? 'purchased-row' : ''} ${p.selectedQty > 0 && p.mark === 'no' ? 'nohay-row' : ''}`;
                 tr.id = `row-${p.id}`;
 
                 const subtotal = (p.selectedQty * p.priceUsd).toFixed(2);
@@ -2732,7 +2758,7 @@
                 ` : '';
 
                 tr.innerHTML = `
-                    <td class="py-2.5 px-3 font-semibold text-gray-800"><button type="button" class="inv-del" onclick="deleteProduct(${p.id})" title="Eliminar este producto (duplicado)">×</button>${p.name}</td>
+                    <td class="py-2.5 px-3 font-semibold text-gray-800"><button type="button" class="inv-del" onclick="deleteProduct(${p.id})" title="Eliminar este producto (duplicado)">×</button>${p.name}<div class="mk2" id="mk-${p.id}" ${p.selectedQty > 0 ? '' : 'hidden'}><button type="button" class="si ${p.mark === 'ok' ? 'on' : ''}" onclick="setMark(${p.id}, 'ok')">✓ Sí</button><button type="button" class="no ${p.mark === 'no' ? 'on' : ''}" onclick="setMark(${p.id}, 'no')">✗ No</button></div></td>
                     ${aisleColHtml}
                     <td class="py-2.5 px-2 text-right price-col ${priceColClass} border-l border-gray-100">
                         <input type="number" step="0.01" min="0" id="pbs-${p.id}" value="${p.priceBs.toFixed(2)}" oninput="updateProductPrice(${p.id}, 'bs', this.value)" onchange="refreshPriceInputs(${p.id})" class="w-full min-w-[5.5rem] text-right border border-gray-300 rounded py-1 px-1.5 font-mono text-xs text-gray-700 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
@@ -2883,9 +2909,9 @@
                 groupItems.forEach(i => {
                     const subtotal = (i.qty * itemUsd(i)).toFixed(2);
                     rowsHtml += `
-                        <tr class="border-b border-gray-100 ${i.purchased ? 'purchased-row' : ''}">
-                            <td class="py-2.5 px-3 text-center w-12">
-                                <input type="checkbox" ${i.purchased ? 'checked' : ''} onchange="toggleListItemPurchased(${list.id}, ${i.pid}, this.checked)" class="w-5 h-5 text-emerald-600 rounded cursor-pointer">
+                        <tr class="border-b border-gray-100 ${i.purchased ? 'purchased-row' : ''} ${i.noHay && !i.purchased ? 'nohay-row' : ''}">
+                            <td class="py-2.5 px-2 text-center w-24">
+                                <div class="mk2" style="flex-direction:column;margin:0"><button type="button" class="si ${i.purchased ? 'on' : ''}" onclick="setListMark(${list.id}, ${i.pid}, 'ok')">✓ Sí</button><button type="button" class="no ${i.noHay && !i.purchased ? 'on' : ''}" onclick="setListMark(${list.id}, ${i.pid}, 'no')">✗ No</button></div>
                             </td>
                             <td class="py-2.5 px-3 font-semibold ${i.purchased ? 'purchased-text' : 'text-gray-800'}"><button type="button" class="inv-del" onclick="deleteListItem(${list.id}, ${i.pid})" title="Quitar de esta lista">×</button>${esc(i.name)}</td>
                             <td class="py-2.5 px-2 text-right w-32">
@@ -3161,6 +3187,56 @@
         }
 
 
+        // Marcar Sí / No mientras compras (tocar otra vez la misma opción la quita)
+        function setMark(id, m) {
+            const p = products.find(x => x.id === id);
+            if (!p) return;
+            p.mark = p.mark === m ? '' : m;
+            saveProductsLocally();
+            const row = document.getElementById(`row-${id}`);
+            if (row) {
+                row.classList.toggle('purchased-row', p.mark === 'ok');
+                row.classList.toggle('nohay-row', p.mark === 'no');
+                row.querySelector('.mk2 .si').classList.toggle('on', p.mark === 'ok');
+                row.querySelector('.mk2 .no').classList.toggle('on', p.mark === 'no');
+            }
+            updateMfBar();
+        }
+
+        function setListMark(listId, pid, m) {
+            const l = savedLists.find(x => x.id === listId);
+            const it = l ? l.items.find(x => x.pid === pid) : null;
+            if (!it) return;
+            const cur = it.purchased ? 'ok' : (it.noHay ? 'no' : '');
+            const nv = cur === m ? '' : m;
+            it.purchased = nv === 'ok';
+            it.noHay = nv === 'no';
+            saveListsLocally();
+            renderCurrentTab();
+        }
+
+        // Barra de abajo: total del pedido y lo confirmado, en cualquier pestaña
+        function updateMfBar() {
+            const bar = document.getElementById('mfBar');
+            if (!bar) return;
+            let items;
+            const l = (currentTab === 'shopping' && openListId) ? getOpenList() : null;
+            if (l) items = l.items.filter(i => i.qty > 0).map(i => ({ qty: i.qty, usd: itemUsd(i), m: i.purchased ? 'ok' : (i.noHay ? 'no' : '') }));
+            else if (currentTab === 'missing') items = getMissingEntries().map(e => ({ qty: e.it.qty, usd: itemUsd(e.it), m: '' }));
+            else items = products.filter(p => p.selectedQty > 0).map(p => ({ qty: p.selectedQty, usd: p.priceUsd, m: p.mark || '' }));
+            const IVA = 1.16, rate = getCurrentRate();
+            let t = 0, ok = 0, okN = 0, noN = 0;
+            items.forEach(i => { const v = i.qty * i.usd * IVA; t += v; if (i.m === 'ok') { ok += v; okN++; } else if (i.m === 'no') noN++; });
+            const bs = n => 'Bs. ' + (n * rate).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('mfN').innerHTML = items.length + (items.length === 1 ? ' producto' : ' productos') + (l ? '<br>Lista: ' + esc(l.name) : (currentTab === 'missing' ? '<br>Faltantes' : '<br>Pedido · con IVA'));
+            document.getElementById('mfT').innerHTML = '$' + t.toFixed(2) + '<span>' + bs(t) + '</span>';
+            document.getElementById('mfOk').textContent = '$' + ok.toFixed(2);
+            document.getElementById('mfOkN').textContent = okN;
+            document.getElementById('mfNo').textContent = noN;
+            document.getElementById('mfPe').textContent = items.length - okN - noN;
+            document.getElementById('mfR2').style.display = currentTab === 'missing' ? 'none' : '';
+        }
+
         function toggleListItemPurchased(listId, pid, isChecked) {
             const l = savedLists.find(x => x.id === listId);
             const it = l ? l.items.find(x => x.pid === pid) : null;
@@ -3202,6 +3278,8 @@
             if (p) {
                 const parsedVal = parseInt(qty);
                 p.selectedQty = (isNaN(parsedVal) || parsedVal < 0) ? 0 : parsedVal;
+                const mk = document.getElementById(`mk-${id}`);
+                if (mk) mk.hidden = !(p.selectedQty > 0);
                 
                 const subtotal = (p.selectedQty * p.priceUsd).toFixed(2);
                 
@@ -3339,7 +3417,7 @@
 
         function clearQuantities() {
             if (products.some(p => p.selectedQty > 0) && !confirm("¿Limpiar todas las cantidades anotadas? (Los productos no se borran)")) return;
-            products.forEach(p => { p.selectedQty = 0; p.purchased = false; });
+            products.forEach(p => { p.selectedQty = 0; p.purchased = false; p.mark = ''; });
             saveProductsLocally();
             renderCurrentTab();
         }
@@ -3364,6 +3442,7 @@
             document.getElementById('ivaUsd').innerText = `$${ivaUSD.toFixed(2)}`;
             document.getElementById('totalUsd').innerText = `$${totalUSD.toFixed(2)}`;
             document.getElementById('totalBs').innerText = `Bs. ${totalBS.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            updateMfBar();
         }
 
         function openModal() {
@@ -3951,7 +4030,7 @@
         function cargarSugSol() {
             const L = sugSolItems(); if (!L.length) return;
             if (!confirm('¿Cargar el pedido sugerido de Mundo Famoso?\n' + L.map(x => x.q + ' x ' + x.p.name).join('\n') + '\n\nSe ponen esas cantidades en el catálogo. Revísalas antes de guardar la lista.')) return;
-            L.forEach(x => { x.p.selectedQty = x.q; x.p.purchased = false; });
+            L.forEach(x => { x.p.selectedQty = x.q; x.p.purchased = false; x.p.mark = ''; });
             saveProductsLocally();
             localStorage.setItem('sol22_sug_' + PEDIDO_SUGERIDO.id, '1');
             renderSugSol(); switchTab('catalog');
