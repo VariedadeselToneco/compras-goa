@@ -2293,7 +2293,7 @@
 
                 <div id="modalAisleField">
                     <label class="block text-[11px] font-semibold text-gray-600 uppercase mb-1">Pasillo</label>
-                    <input type="text" id="newProdAisle" placeholder="Ej. Pasillo 1" class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    <select id="newProdAisle" onchange="mfElegirPasillo(this)" class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white font-semibold"></select>
                 </div>
 
                 <div class="grid grid-cols-2 gap-2">
@@ -2769,7 +2769,7 @@
 
                 let aisleColHtml = categoryName === 'catalog' ? `
                     <td class="py-2.5 px-2 text-center price-col ${priceColClass} border-l border-gray-100">
-                        <input type="text" value="${p.aisle || ''}" onchange="updateProductAisleInput(${p.id}, this.value)" class="w-28 text-center bg-indigo-50 text-indigo-900 border border-indigo-200 text-xs font-bold py-1 px-1 rounded focus:outline-none">
+                        <select onchange="mfElegirPasillo(this, v => updateProductAisleInput(${p.id}, v))" class="w-28 text-center bg-indigo-50 text-indigo-900 border border-indigo-200 text-xs font-bold py-1 px-1 rounded focus:outline-none">${mfOpcionesPasillo(p.aisle)}</select>
                     </td>
                 ` : '';
 
@@ -3514,6 +3514,32 @@
         }
 
         let editingId = null;
+        // Pasillos: se escogen de una lista (Pasillo 1, 2, 3…) y se puede crear uno nuevo
+        function mfPasillos(extra) {
+            const set = new Set(products.filter(x => x.category === 'catalog' && x.aisle).map(x => x.aisle.trim()));
+            if (extra) set.add(extra);
+            return [...set].sort((a, b) => a.localeCompare(b, 'es', { numeric: true, sensitivity: 'base' }));
+        }
+        function mfOpcionesPasillo(actual) {
+            const e = v => String(v).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+            const list = mfPasillos(actual);
+            return (actual ? '' : '<option value="" selected>Escoge pasillo…</option>') +
+                list.map(a => `<option value="${e(a)}" ${a === actual ? 'selected' : ''}>${e(a)}</option>`).join('') +
+                '<option value="__nuevo__">＋ Nuevo pasillo…</option>';
+        }
+        function mfElegirPasillo(sel, onPick) {
+            let v = sel.value;
+            if (v === '__nuevo__') {
+                const n = (prompt('Nombre del nuevo pasillo (ej. Pasillo 9):') || '').trim();
+                if (!n) { sel.value = sel.dataset.prev || (sel.options[0] ? sel.options[0].value : ''); return; }
+                v = n;
+                const o = document.createElement('option'); o.value = n; o.textContent = n;
+                sel.insertBefore(o, sel.querySelector('option[value="__nuevo__"]'));
+                sel.value = n;
+            }
+            sel.dataset.prev = v;
+            if (onPick) onPick(v);
+        }
         // Editar un producto: abre la misma ventana de "Agregar" con sus datos
         function editProduct(id) {
             const p = products.find(x => x.id === id);
@@ -3523,7 +3549,7 @@
             document.getElementById('pmSave').innerText = 'Guardar Cambios';
             document.getElementById('newProdName').value = p.name;
             document.getElementById('newProdCategory').value = p.category;
-            document.getElementById('newProdAisle').value = p.aisle || '';
+            document.getElementById('newProdAisle').innerHTML = mfOpcionesPasillo(p.aisle);
             document.getElementById('newProdPriceUsd').value = p.priceUsd ? p.priceUsd.toFixed(2) : '';
             document.getElementById('newProdPriceBs').value = p.priceBs ? p.priceBs.toFixed(2) : '';
             toggleModalAisleInput();
@@ -3532,6 +3558,7 @@
 
         function openModal() {
             editingId = null;
+            document.getElementById('newProdAisle').innerHTML = mfOpcionesPasillo('');
             document.getElementById('pmTitle').innerText = 'Agregar Producto';
             document.getElementById('pmSave').innerText = 'Guardar Producto';
             document.getElementById('productModal').classList.remove('hidden');
