@@ -1,5 +1,5 @@
 // Compras GOA: funciona sin señal. Guarda las páginas y lo que necesitan la primera vez que se abren con internet.
-const CACHE='goa-offline-v2';
+const CACHE='goa-offline-v3';
 const PRECACHE=['./','./index.html','./checklist.html','./variado.html','./manifest.json','./icon-192.png','./icon-512.png',
   'https://cdn.tailwindcss.com','https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>Promise.all(PRECACHE.map(u=>c.add(new Request(u,{mode:u.startsWith('http')?'no-cors':'same-origin'})).catch(()=>{})))).then(()=>self.skipWaiting()))});
@@ -10,8 +10,8 @@ self.addEventListener('fetch',e=>{
   const url=new URL(req.url);
   if(LIVE.some(h=>url.hostname.endsWith(h)))return; // datos en vivo: siempre por internet
   if(url.origin===location.origin){
-    // Páginas propias: primero internet (para recibir cambios), si no hay señal, la copia guardada
-    e.respondWith(fetch(req).then(r=>{if(r.ok){const c=r.clone();caches.open(CACHE).then(ca=>ca.put(req,c))}return r})
+    // Páginas propias: primero internet, siempre la versión más nueva (no-cache); si no hay señal, la copia guardada
+    e.respondWith(fetch(req,{cache:'no-cache'}).then(r=>{if(r.ok){const c=r.clone();caches.open(CACHE).then(ca=>ca.put(req,c))}return r})
       .catch(()=>caches.match(req,{ignoreSearch:true}).then(r=>r||(req.mode==='navigate'?caches.match('./index.html'):undefined))));
   }else{
     // Estilos, íconos y letras de internet: primero la copia guardada
