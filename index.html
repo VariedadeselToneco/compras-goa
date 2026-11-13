@@ -179,6 +179,7 @@ header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;pa
 .pe input{width:100%;margin-top:3px;padding:10px;border:1.5px solid var(--navy2);border-radius:10px;font-size:16px;outline:none;background:#fff}
 .pe .btn{padding:11px 14px}
 .ofoot{position:sticky;bottom:0;margin-top:auto;background:var(--navy);color:#fff;padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:flex;justify-content:space-between;align-items:center;gap:10px;box-shadow:0 -4px 14px rgba(0,0,0,.18);z-index:2}
+.oadd{flex:none;background:var(--gold2);color:var(--navy);border:0;border-radius:12px;padding:10px 12px;font-weight:800;font-size:14px}
 .ofoot small{display:block;font-size:12px;opacity:.85;line-height:1.35}
 .ofoot small em{font-style:normal;color:#ffb36b}
 .ofoot b{font-size:24px;color:var(--gold2);white-space:nowrap}
@@ -336,7 +337,7 @@ header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;pa
     </div>
     <div class="wnote">El archivo que envías es un html con tu logo donde el proveedor solo puede marcar <b>✓ Hay / ✗ No hay</b>, guardarlo y responderte por WhatsApp. Al confirmar la compra, el pedido pasa al <b>Historial</b> y la lista queda limpia para el próximo.</div>
   </div>
-  <div class="ofoot"><small id="oFc">0 productos</small><div style="text-align:right"><small>✓ Confirmado</small><b id="oFt">$0.00</b></div></div>
+  <div class="ofoot"><small id="oFc">0 productos</small><button class="oadd" id="oAddGo" type="button">＋ Agregar</button><div style="text-align:right"><small>✓ Confirmado</small><b id="oFt">$0.00</b></div></div>
 </div>
 <datalist id="prodList"></datalist>
 
@@ -840,6 +841,7 @@ $('aoBtn').onclick=()=>{
   $('aoName').value=$('aoQty').value=$('aoPrice').value='';$('aoName').focus();
   toast(pr>0||p.price>0?'Agregado al pedido':'Agregado sin precio');
 };
+$('oAddGo').onclick=()=>{const a=document.querySelector('#opanel .addo');a.scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>$('aoName').focus(),350)};
 $('ordBtn').onclick=()=>{$('myTel').value=state.myTel||'';oEdit=null;fillProdList();renderO();openP('opanel')};
 $('myTel').oninput=e=>{state.myTel=e.target.value;save()};
 
