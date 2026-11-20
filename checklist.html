@@ -72,7 +72,7 @@
 <script>if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script>
 </head>
 <body class="bg-gray-100 text-gray-800 min-h-screen" style="padding-bottom:170px">
-<nav class="goa-sw"><a href="./">🛒 Mercabar</a><a href="checklist.html" class="on">✅ Mundo Famoso</a><a href="variado.html">🧺 Variado</a></nav>
+<nav class="goa-sw"><a href="./">🛒 Rovisan</a><a href="checklist.html" class="on">✅ Mundo Famoso</a><a href="variado.html">🧺 Variado</a></nav>
 
     <!-- HEADER Y NAVEGACIÓN PRINCIPAL -->
     <header class="bg-indigo-700 text-white shadow-lg">
@@ -2293,7 +2293,7 @@
                         <option value="catalog">Catálogo Principal (Con Pasillo)</option>
                         <option value="granos">Granos</option>
                         <option value="charcuteria">Charcutería</option>
-                        <option value="mercabar">🛒 Mercabar (otra pestaña)</option>
+                        <option value="mercabar">🛒 Rovisan (otra pestaña)</option>
                         <option value="variado">🧺 Variado (otra pestaña)</option>
                     </select>
                 </div>
@@ -3627,7 +3627,7 @@
 
             // Mercabar o Variado: el producto se manda a esa pestaña
             if (category === 'mercabar' || category === 'variado') {
-                const dest = category === 'mercabar' ? 'Mercabar' : 'Variado';
+                const dest = category === 'mercabar' ? 'Rovisan' : 'Variado';
                 const usd = +(priceUsd || (priceBs / getCurrentRate()) || 0).toFixed(2);
                 if (editingId !== null && !confirm(`¿Pasar "${name}" a ${dest}?\nSe quita de Mundo Famoso.`)) return;
                 const pk = 'goa_pend_' + category;
