@@ -2555,6 +2555,7 @@
             applyFacturaPatch();
 
             applyGranosPatch();
+            applySolPatch();
             fetchBCVRate();
             switchTab('catalog');
             renderSugSol();
@@ -3484,6 +3485,8 @@
             }
             localStorage.removeItem('sol22_patch_' + GRANOS_PATCH.id);
             applyGranosPatch();
+            localStorage.removeItem('sol22_patch_' + SOL_PATCH.id);
+            applySolPatch();
             openListId = null;
             switchTab('catalog');
         }
@@ -4175,6 +4178,161 @@
             });
             saveProductsLocally();
             localStorage.setItem(flag, '1');
+        }
+
+        // Productos nuevos de Mundo Famoso (Sol 22), 20/11/2026. usd = precio por unidad en $ (el IVA 16% ya está sumado cuando iva=true).
+        // Se aplica una sola vez y no duplica: si ya existe un producto con el mismo nombre, no se agrega.
+        const SOL_PATCH = {"id": "sol_2026_11_20", "fecha": "20/11/2026", "items": [
+            {"name": "ACONDICIONADOR PANTENE MASCARILLA", "usd": 0.74, "iva": true},
+            {"name": "ALCOHOL", "usd": 1.31, "iva": true},
+            {"name": "AMBIENTADOR ALIVE", "usd": 1.93, "iva": true},
+            {"name": "APUREÑO", "usd": 0.35, "iva": false},
+            {"name": "ATUN ALDIVIA 160g", "usd": 1.0, "iva": false},
+            {"name": "ATUN BEEN", "usd": 1.75, "iva": false},
+            {"name": "ATUN BUBBA CON FRIJOLES 140g", "usd": 1.24, "iva": false},
+            {"name": "ATUN BUBBA CON FRIJOLES 160g", "usd": 1.37, "iva": false},
+            {"name": "ATUN BUBBA CON MAIZ DULCE", "usd": 1.53, "iva": false},
+            {"name": "ATUN BUBBA DESMENUZADO 140g", "usd": 0.81, "iva": false},
+            {"name": "ATUN BUBBA DESMENUZADO 160g", "usd": 1.21, "iva": false},
+            {"name": "ATUN BUBBA ENTERO", "usd": 1.27, "iva": false},
+            {"name": "ATUN DESMENUZADO LAILA 160", "usd": 1.01, "iva": false},
+            {"name": "BIANCHI", "usd": 0.02, "iva": true},
+            {"name": "BOLSA 2kg SIN ASA", "usd": 2.13, "iva": true},
+            {"name": "BOLSA DE BASURA 40k", "usd": 0.09, "iva": true},
+            {"name": "BOLSAS DE 3Kg", "usd": 1.03, "iva": true},
+            {"name": "BOLSAS DE 5 Kg", "usd": 0.01, "iva": true},
+            {"name": "BOMBILLO 12w", "usd": 0.81, "iva": true},
+            {"name": "BOMBILLO 24", "usd": 1.23, "iva": true},
+            {"name": "BOMBILLO 30w", "usd": 1.42, "iva": true},
+            {"name": "BOMBILLO 9w", "usd": 0.89, "iva": true},
+            {"name": "CATALINA XL", "usd": 1.39, "iva": true},
+            {"name": "CATALINAS", "usd": 1.39, "iva": true},
+            {"name": "CEPILLO LAVAR ROPA", "usd": 0.89, "iva": true},
+            {"name": "CERELAC 400gr", "usd": 6.84, "iva": false},
+            {"name": "CHANCLETA", "usd": 1.16, "iva": true},
+            {"name": "CHARMY ESPECIAL", "usd": 1.01, "iva": true},
+            {"name": "CHESITOS 15gr", "usd": 0.2, "iva": true},
+            {"name": "CHESITOS 70GR", "usd": 0.74, "iva": true},
+            {"name": "CHICLE TRIDENT", "usd": 0.58, "iva": true},
+            {"name": "CHOCOLATE CRICRI 30gr", "usd": 1.25, "iva": true},
+            {"name": "CHOCOLATE RIKITI 30gr", "usd": 1.26, "iva": true},
+            {"name": "COCADA", "usd": 1.39, "iva": true},
+            {"name": "COCOTAZO", "usd": 0.28, "iva": true},
+            {"name": "COLORES NORMA", "usd": 1.24, "iva": true},
+            {"name": "CONDENSADA TRIANGULO", "usd": 1.16, "iva": false},
+            {"name": "CREMA PARA PEINAR A. ARGAN", "usd": 2.45, "iva": true},
+            {"name": "CREMA PARA PEINAR COLAGENO", "usd": 2.37, "iva": true},
+            {"name": "CREMA PARA PEINAR KERATINA", "usd": 2.37, "iva": true},
+            {"name": "CREMA PARA PEINAR LISO Y BRILLO", "usd": 2.37, "iva": true},
+            {"name": "CREMA PARA PEINAR PANTENE SOBRE", "usd": 0.39, "iva": true},
+            {"name": "CREMA PARA PEINAR RIZOS DEFINIDOS", "usd": 2.81, "iva": true},
+            {"name": "CROKATINAS 3 Pqtes.", "usd": 1.58, "iva": true},
+            {"name": "DANDY COLOMBINA", "usd": 0.19, "iva": true},
+            {"name": "DES. CLINICAL HOMBRE SPEED", "usd": 0.49, "iva": true},
+            {"name": "DESODORANTE BALANCE CLINICO", "usd": 0.48, "iva": true},
+            {"name": "DESODORANTE C/TAPA", "usd": 1.0, "iva": true},
+            {"name": "DESODORANTE CLINICAL MUJER", "usd": 0.56, "iva": true},
+            {"name": "DESODORANTE LS SOBRE", "usd": 0.23, "iva": true},
+            {"name": "DESODORANTE SS SOBRE", "usd": 0.24, "iva": true},
+            {"name": "DETERGENTE ALIVE 3kg", "usd": 7.37, "iva": true},
+            {"name": "DETERGENTE ALIVE 400g", "usd": 1.19, "iva": true},
+            {"name": "DETERGENTE ALIVE 800g", "usd": 2.54, "iva": true},
+            {"name": "DETERGENTE DOLPHIN 400gr", "usd": 0.75, "iva": true},
+            {"name": "DETERGENTE LIQUIDO OSO BLANCO", "usd": 0.7, "iva": true},
+            {"name": "ESPONJA X5", "usd": 1.09, "iva": true},
+            {"name": "GALLETA BABO", "usd": 0.37, "iva": true},
+            {"name": "GALLETA MARIA PAMPA 180g", "usd": 0.84, "iva": true},
+            {"name": "GALLETA MARIA PAMPA CHOCOLATE", "usd": 0.36, "iva": true},
+            {"name": "GALLETA PAMPA MARIA 150g", "usd": 0.48, "iva": true},
+            {"name": "GALLETA SALTICAS", "usd": 0.63, "iva": true},
+            {"name": "GALLETAS FESTIVAL 1*6", "usd": 2.02, "iva": true},
+            {"name": "GALLETAS SALRICAS PQTE.", "usd": 3.05, "iva": true},
+            {"name": "GELATINA 250gr ROLDA", "usd": 2.32, "iva": true},
+            {"name": "GELATINA EVERY NIGHT 100gr", "usd": 2.44, "iva": true},
+            {"name": "GELATINA ROLDA 120gr", "usd": 2.7, "iva": true},
+            {"name": "GELATINA SOBRE CABELLO", "usd": 0.94, "iva": true},
+            {"name": "HISOPO TURMAX", "usd": 0.74, "iva": true},
+            {"name": "HUGME PROTECTOR", "usd": 0.86, "iva": true},
+            {"name": "JABON MIMLOT 125g", "usd": 0.75, "iva": true},
+            {"name": "JABON MIMLOT 90g", "usd": 0.49, "iva": true},
+            {"name": "JABON PROTEX 75gr", "usd": 1.11, "iva": true},
+            {"name": "LAMPARA RECARGABLE LARGA", "usd": 5.7, "iva": true},
+            {"name": "LAPIZ MONGOL", "usd": 0.08, "iva": true},
+            {"name": "LAVAPLATOS OSO BLANCO 200 ml", "usd": 0.84, "iva": true},
+            {"name": "LIGAS DE BILLETE", "usd": 0.53, "iva": true},
+            {"name": "LOKIÑO 100und", "usd": 2.52, "iva": true},
+            {"name": "MAIZINA 200 Gr", "usd": 1.45, "iva": false},
+            {"name": "MAIZINA 90gr", "usd": 0.81, "iva": false},
+            {"name": "MARGARINA DELINE 250gr", "usd": 1.27, "iva": false},
+            {"name": "MARGARINA DELINE 500 GRS", "usd": 2.32, "iva": false},
+            {"name": "MARMOLEADA", "usd": 1.39, "iva": true},
+            {"name": "MORDISQUITO", "usd": 0.32, "iva": true},
+            {"name": "PAN DE AREQUIPE", "usd": 1.44, "iva": false},
+            {"name": "PAN DE GUAYABA", "usd": 1.31, "iva": false},
+            {"name": "PAN DE LECHE", "usd": 1.2, "iva": false},
+            {"name": "PAN DE TUNJA", "usd": 1.1, "iva": false},
+            {"name": "PANELA OSO BLANCO 200g", "usd": 1.51, "iva": true},
+            {"name": "PASTELES DE GUAYABA", "usd": 1.4, "iva": false},
+            {"name": "PAÑAL ADULTO XG", "usd": 13.46, "iva": true},
+            {"name": "PAÑAL BABY FINGER G.", "usd": 3.91, "iva": true},
+            {"name": "PAÑAL BABY FINGER M 18 UND", "usd": 3.61, "iva": true},
+            {"name": "PAÑAL FINGER XG 10und", "usd": 2.47, "iva": true},
+            {"name": "PAÑAL FINGER XXG", "usd": 4.14, "iva": true},
+            {"name": "PEPITO RIKOS", "usd": 0.52, "iva": true},
+            {"name": "PEPITO XXL", "usd": 2.85, "iva": true},
+            {"name": "PILAS AA", "usd": 0.53, "iva": true},
+            {"name": "POLVOROSA", "usd": 1.39, "iva": true},
+            {"name": "POTATO Pq", "usd": 0.92, "iva": true},
+            {"name": "POTATO WILLINGER", "usd": 1.76, "iva": true},
+            {"name": "RAQUETY Pq", "usd": 0.52, "iva": true},
+            {"name": "REFLECTOR 200w", "usd": 5.53, "iva": true},
+            {"name": "REFLECTOR C/ SOCATE 50w", "usd": 1.51, "iva": true},
+            {"name": "REXONA CLINICAL POMO", "usd": 1.57, "iva": true},
+            {"name": "SAMBA FRESA", "usd": 0.97, "iva": true},
+            {"name": "SARDINAS WILLINGER 155g", "usd": 0.56, "iva": false},
+            {"name": "SHAMPO ALIVE 250ml", "usd": 1.67, "iva": true},
+            {"name": "SHAMPO BF NIÑOS 200ml", "usd": 0.93, "iva": true},
+            {"name": "SHAMPO HS 180CC", "usd": 6.03, "iva": true},
+            {"name": "SPEED MAX LITRO", "usd": 0.05, "iva": true},
+            {"name": "STADIUM 25g", "usd": 0.57, "iva": true},
+            {"name": "SUAVIZANTE ALIVE 200ml", "usd": 0.6, "iva": true},
+            {"name": "SUAVIZANTE OSO BLANCO", "usd": 0.57, "iva": true},
+            {"name": "TALCO PARA NIÑOS 100g BF", "usd": 0.66, "iva": true},
+            {"name": "TALCO PARA NIÑOS 200g", "usd": 1.37, "iva": true},
+            {"name": "TINTE LOVIA NEGRO", "usd": 0.82, "iva": true},
+            {"name": "TINTE LOVIA NEGRO Gde", "usd": 2.09, "iva": true},
+            {"name": "TINTE SHAMPO NEGRO", "usd": 0.51, "iva": true},
+            {"name": "TOALLA CLINICA ALIVA", "usd": 2.59, "iva": true},
+            {"name": "TOALLA HUGME 245mm", "usd": 0.92, "iva": true},
+            {"name": "TOALLAS ALIVE EXTRA LARGAS 8 und", "usd": 1.08, "iva": true},
+            {"name": "TOALLAS HUMEDAS MIMLOT", "usd": 1.11, "iva": true},
+            {"name": "TOALLIN BAMBO", "usd": 0.74, "iva": true},
+            {"name": "TOSTON LAJA", "usd": 0.45, "iva": true},
+            {"name": "TRULULU X100", "usd": 0.03, "iva": true},
+            {"name": "VAPORUB 25G", "usd": 0.5, "iva": true},
+            {"name": "VASELINA 120ml", "usd": 2.04, "iva": true}
+        ]};
+        function applySolPatch() {
+            const flag = 'sol22_patch_' + SOL_PATCH.id;
+            if (localStorage.getItem(flag)) return;
+            const rate = getCurrentRate();
+            let nextId = Date.now() + 2000;
+            const existentes = new Set(products.map(x => normName(x.name)));
+            let created = 0;
+            SOL_PATCH.items.forEach(it => {
+                const k = normName(it.name);
+                if (existentes.has(k)) return;
+                existentes.add(k);
+                products.push({ id: nextId++, category: 'catalog', name: it.name, priceUsd: it.usd,
+                                 priceBs: it.usd * rate, selectedQty: 0, purchased: false, aisle: '' });
+                created++;
+            });
+            saveProductsLocally();
+            localStorage.setItem(flag, '1');
+            if (created) {
+                if (typeof renderCurrentTab === 'function') renderCurrentTab();
+                setTimeout(() => alert(`Catálogo actualizado (${SOL_PATCH.fecha}): ${created} productos nuevos de Mundo Famoso.`), 400);
+            }
         }
 
 
